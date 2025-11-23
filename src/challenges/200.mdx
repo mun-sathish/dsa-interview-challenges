@@ -1,0 +1,92 @@
+### [Number of Islands](https://leetcode.com/problems/number-of-islands/)
+
+- Use DFS or BFS to traverse the grid and mark visited cells
+- Count the number of times we start a new DFS/BFS traversal
+- Each traversal represents one island
+
+#### Visual Explanation
+
+**DFS Grid Traversal:**
+```
+Grid:
+1 1 0 0 0
+1 1 0 0 0
+0 0 1 0 0
+0 0 0 1 1
+
+Step 1: Start at (0,0), DFS marks entire island
+1 1 0 0 0    →    X X 0 0 0
+1 1 0 0 0    →    X X 0 0 0
+0 0 1 0 0          0 0 1 0 0
+0 0 0 1 1          0 0 0 1 1
+Count = 1
+
+Step 2: Continue scan, find (2,2), DFS marks it
+X X 0 0 0          X X 0 0 0
+X X 0 0 0    →     X X 0 0 0
+0 0 1 0 0          0 0 X 0 0
+0 0 0 1 1          0 0 0 1 1
+Count = 2
+
+Step 3: Find (3,3), DFS marks connected cells
+X X 0 0 0          X X 0 0 0
+X X 0 0 0    →     X X 0 0 0
+0 0 X 0 0          0 0 X 0 0
+0 0 0 1 1          0 0 0 X X
+Count = 3 ✓
+
+Total islands: 3
+```
+
+**Key insight:**
+```
+For each unvisited '1':
+  1. Increment island count
+  2. DFS/BFS to mark entire island as visited
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=pV2kpPD66nE)
+
+```js copy
+/**
+ * @param {character[][]} grid
+ * @return {number}
+ */
+var numIslands = function(grid) {
+    if (!grid || grid.length === 0) return 0;
+    
+    let count = 0;
+    const rows = grid.length;
+    const cols = grid[0].length;
+    
+    function dfs(i, j) {
+        if (i < 0 || i >= rows || j < 0 || j >= cols || grid[i][j] === '0') {
+            return;
+        }
+        
+        grid[i][j] = '0'; // mark as visited
+        
+        // explore all 4 directions
+        dfs(i + 1, j);
+        dfs(i - 1, j);
+        dfs(i, j + 1);
+        dfs(i, j - 1);
+    }
+    
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (grid[i][j] === '1') {
+                count++;
+                dfs(i, j);
+            }
+        }
+    }
+    
+    return count;
+};
+```
+
+##### Complexity
+
+- Time: O(m * n) where m is rows and n is columns
+- Space: O(m * n) for recursive call stack in worst case

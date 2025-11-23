@@ -1,0 +1,64 @@
+### [Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/)
+
+- Use sliding window with two hash maps for character counts
+- Expand window until all characters of t are included
+- Contract window while maintaining all characters
+- Track minimum window that contains all characters
+
+```js copy
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {string}
+ */
+var minWindow = function(s, t) {
+    if (s.length < t.length) return "";
+    
+    const tCount = {};
+    for (let char of t) {
+        tCount[char] = (tCount[char] || 0) + 1;
+    }
+    
+    let required = Object.keys(tCount).length;
+    let formed = 0;
+    const windowCount = {};
+    
+    let left = 0;
+    let minLen = Infinity;
+    let minLeft = 0;
+    
+    for (let right = 0; right < s.length; right++) {
+        const char = s[right];
+        windowCount[char] = (windowCount[char] || 0) + 1;
+        
+        if (tCount[char] && windowCount[char] === tCount[char]) {
+            formed++;
+        }
+        
+        // Contract window
+        while (formed === required && left <= right) {
+            // Update result
+            if (right - left + 1 < minLen) {
+                minLen = right - left + 1;
+                minLeft = left;
+            }
+            
+            const leftChar = s[left];
+            windowCount[leftChar]--;
+            
+            if (tCount[leftChar] && windowCount[leftChar] < tCount[leftChar]) {
+                formed--;
+            }
+            
+            left++;
+        }
+    }
+    
+    return minLen === Infinity ? "" : s.substring(minLeft, minLeft + minLen);
+};
+```
+
+##### Complexity
+
+- Time: O(|S| + |T|) where S and T are lengths of strings
+- Space: O(|S| + |T|) for hash maps

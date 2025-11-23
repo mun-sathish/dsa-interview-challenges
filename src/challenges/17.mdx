@@ -1,0 +1,80 @@
+### [Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/)
+
+- Use backtracking to generate all letter combinations
+- Map digits to corresponding letters
+- Build combinations character by character
+- Backtrack when reaching end of digits
+
+#### Visual Explanation
+
+**Backtracking Tree for "23":**
+```
+Input: digits = "23"
+Map: 2→"abc", 3→"def"
+
+                 ""
+        /        |        \
+       a         b         c
+     / | \     / | \     / | \
+    d  e  f   d  e  f   d  e  f
+
+Results: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+```
+
+**Step-by-step:**
+```
+Start: ""
+Add 'a': "a"
+  Add 'd': "ad" ✓ (complete)
+  Add 'e': "ae" ✓ (complete)
+  Add 'f': "af" ✓ (complete)
+Backtrack to ""
+Add 'b': "b"
+  Add 'd': "bd" ✓ (complete)
+  ...
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=0snEunUacZY)
+
+```js copy
+/**
+ * @param {string} digits
+ * @return {string[]}
+ */
+var letterCombinations = function(digits) {
+    if (digits.length === 0) return [];
+    
+    const phoneMap = {
+        '2': 'abc',
+        '3': 'def',
+        '4': 'ghi',
+        '5': 'jkl',
+        '6': 'mno',
+        '7': 'pqrs',
+        '8': 'tuv',
+        '9': 'wxyz'
+    };
+    
+    const result = [];
+    
+    function backtrack(index, current) {
+        if (index === digits.length) {
+            result.push(current);
+            return;
+        }
+        
+        const letters = phoneMap[digits[index]];
+        for (let letter of letters) {
+            backtrack(index + 1, current + letter);
+        }
+    }
+    
+    backtrack(0, '');
+    return result;
+};
+```
+
+##### Complexity
+
+- Time: O(4^n * n) where n is length of digits
+- Space: O(n) for recursion stack

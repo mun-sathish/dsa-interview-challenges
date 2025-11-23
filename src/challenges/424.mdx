@@ -1,0 +1,40 @@
+### [Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/)
+
+- Use sliding window with character frequency map
+- Track the most frequent character in current window
+- If window size - max frequency > k, shrink window
+- The answer is the maximum window size seen
+
+```js copy
+/**
+ * @param {string} s
+ * @param {number} k
+ * @return {number}
+ */
+var characterReplacement = function(s, k) {
+    const count = {};
+    let maxCount = 0;
+    let maxLen = 0;
+    let left = 0;
+    
+    for (let right = 0; right < s.length; right++) {
+        count[s[right]] = (count[s[right]] || 0) + 1;
+        maxCount = Math.max(maxCount, count[s[right]]);
+        
+        // If number of replacements needed > k, shrink window
+        while (right - left + 1 - maxCount > k) {
+            count[s[left]]--;
+            left++;
+        }
+        
+        maxLen = Math.max(maxLen, right - left + 1);
+    }
+    
+    return maxLen;
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is length of string
+- Space: O(1) since we have at most 26 characters

@@ -1,0 +1,111 @@
+### [All Paths From Source to Target](https://leetcode.com/problems/all-paths-from-source-to-target/)
+
+- **DFS Pattern**: Find all paths from source (0) to target (n-1)
+- **Recursive approach**: Natural for path exploration
+- **Backtracking**: Build path, recurse, then backtrack
+- Perfect problem to learn DFS traversal pattern
+
+#### Visual Explanation
+
+**DFS Backtracking (graph=[[1,2],[3],[3],[]]):**
+```
+Graph:    0 → 1 → 3
+          ↓   ↗
+          2 ──┘
+
+Target: node 3
+
+DFS Exploration Tree:
+                    0
+                   / \
+                  1   2
+                  |   |
+                  3   3
+                  
+Path 1: [0, 1, 3]
+  - Start at 0, path=[0]
+  - Visit 1, path=[0,1]
+  - Visit 3, path=[0,1,3] ✓ Found target!
+  - Backtrack to 1, path=[0,1]
+  - Backtrack to 0, path=[0]
+
+Path 2: [0, 2, 3]
+  - At 0, path=[0]
+  - Visit 2, path=[0,2]
+  - Visit 3, path=[0,2,3] ✓ Found target!
+  - Backtrack complete
+
+Result: [[0,1,3], [0,2,3]]
+```
+
+**Key insight:**
+```
+Backtracking pattern:
+1. Add current node to path
+2. If target reached → save path
+3. Else → explore neighbors
+4. Remove current node (backtrack)
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=8f1XPm4WOUc)
+
+```js copy
+/**
+ * @param {number[][]} graph
+ * @return {number[][]}
+ */
+
+// DFS Recursive Approach
+var allPathsSourceTarget = function(graph) {
+    const result = [];
+    const target = graph.length - 1;
+    
+    function dfs(node, path) {
+        // Add current node to path
+        path.push(node);
+        
+        // If reached target, add path to result
+        if (node === target) {
+            result.push([...path]);
+        } else {
+            // Explore all neighbors
+            for (let neighbor of graph[node]) {
+                dfs(neighbor, path);
+            }
+        }
+        
+        // Backtrack: remove current node
+        path.pop();
+    }
+    
+    dfs(0, []);
+    return result;
+};
+
+// DFS Iterative Approach using Stack
+var allPathsSourceTargetIterative = function(graph) {
+    const result = [];
+    const target = graph.length - 1;
+    const stack = [[0, [0]]]; // [node, path]
+    
+    while (stack.length > 0) {
+        const [node, path] = stack.pop();
+        
+        if (node === target) {
+            result.push(path);
+            continue;
+        }
+        
+        for (let neighbor of graph[node]) {
+            stack.push([neighbor, [...path, neighbor]]);
+        }
+    }
+    
+    return result;
+};
+```
+
+##### Complexity
+
+- Time: O(2^n * n) where n is number of nodes
+- Space: O(n) for recursion stack or O(2^n * n) for storing paths

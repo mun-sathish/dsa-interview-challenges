@@ -1,0 +1,105 @@
+### [Balanced Binary Tree](https://leetcode.com/problems/balanced-binary-tree/)
+
+- Use recursion to check height and balance simultaneously
+- Return -1 if subtree is unbalanced
+- Check if height difference between left and right ≤ 1
+- Return height if balanced, -1 if not
+
+#### Visual Explanation
+
+**Height-Balanced Check:**
+```
+Balanced Tree:      3
+                   / \
+                  9   20
+                     /  \
+                    15   7
+
+Height calculation (bottom-up):
+checkHeight(9):
+  left = 0, right = 0
+  |0 - 0| = 0 ≤ 1 ✓
+  return 1
+
+checkHeight(15): return 1
+checkHeight(7): return 1
+
+checkHeight(20):
+  left = 1, right = 1
+  |1 - 1| = 0 ≤ 1 ✓
+  return 2
+
+checkHeight(3):
+  left = 1, right = 2
+  |1 - 2| = 1 ≤ 1 ✓
+  return 3
+
+Result: Balanced ✓
+
+Unbalanced Tree:    1
+                   /
+                  2
+                 /
+                3
+
+checkHeight(3): return 1
+checkHeight(2):
+  left = 1, right = 0
+  |1 - 0| = 1 ≤ 1 ✓
+  return 2
+  
+checkHeight(1):
+  left = 2, right = 0
+  |2 - 0| = 2 > 1 ✗
+  return -1
+
+Result: Not balanced ✗
+```
+
+**Key insight:**
+```
+Balanced: |leftHeight - rightHeight| ≤ 1
+Return -1 to propagate unbalanced state
+Check balance while calculating height
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=QfJsau0ItOY)
+
+```js copy
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isBalanced = function(root) {
+    function checkHeight(node) {
+        if (!node) return 0;
+        
+        const leftHeight = checkHeight(node.left);
+        if (leftHeight === -1) return -1;
+        
+        const rightHeight = checkHeight(node.right);
+        if (rightHeight === -1) return -1;
+        
+        if (Math.abs(leftHeight - rightHeight) > 1) {
+            return -1;
+        }
+        
+        return 1 + Math.max(leftHeight, rightHeight);
+    }
+    
+    return checkHeight(root) !== -1;
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is number of nodes
+- Space: O(h) where h is height (recursion stack)

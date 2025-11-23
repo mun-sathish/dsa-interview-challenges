@@ -1,0 +1,76 @@
+### [Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/)
+
+- **DP Pattern**: 0/1 Knapsack variation
+- Check if array can be partitioned into two equal sum subsets
+- Target sum = total / 2
+- dp[i] = true if sum i is achievable
+
+#### Visual Explanation
+
+**DP Array Evolution (nums=[1,5,11,5], target=11):**
+```
+Initial: dp[0]=true, rest=false
+Sum:     0  1  2  3  4  5  6  7  8  9  10  11
+
+After num=1:
+dp:      T  T  F  F  F  F  F  F  F  F  F   F
+         ↑  ↑
+        0  0+1
+
+After num=5:
+dp:      T  T  F  F  F  T  T  F  F  F  F   F
+         ↑  ↑        ↑  ↑
+        0  1        5  6(1+5)
+
+After num=11:
+dp:      T  T  F  F  F  T  T  F  F  F  F   T
+         ↑  ↑        ↑  ↑                 ↑
+        0  1        5  6                 11(0+11)
+
+After num=5:
+dp:      T  T  F  F  F  T  T  F  F  F  T   T ✓
+         ↑  ↑        ↑  ↑              ↑   ↑
+        0  1        5  6             10  11
+
+Partition: [1,5,5] and [11] both sum to 11
+```
+
+**Key insight:**
+```
+Traverse backwards to avoid using same element twice:
+for i from target down to num:
+    dp[i] = dp[i] OR dp[i - num]
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=IsvocB5BJhw)
+
+```js copy
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canPartition = function(nums) {
+    const total = nums.reduce((sum, num) => sum + num, 0);
+    
+    // If total is odd, can't partition into equal sums
+    if (total % 2 !== 0) return false;
+    
+    const target = total / 2;
+    const dp = Array(target + 1).fill(false);
+    dp[0] = true; // sum 0 is always achievable
+    
+    for (let num of nums) {
+        // Traverse backwards to avoid using same element twice
+        for (let i = target; i >= num; i--) {
+            dp[i] = dp[i] || dp[i - num];
+        }
+    }
+    
+    return dp[target];
+};
+```
+
+##### Complexity
+
+- Time: O(n * sum) where n is array length and sum is total/2
+- Space: O(sum) for dp array

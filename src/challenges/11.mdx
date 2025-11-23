@@ -1,0 +1,74 @@
+### [Container With Most Water](https://leetcode.com/problems/container-with-most-water/)
+
+- Use two pointers at both ends of array
+- Calculate area with current pointers
+- Move the pointer with smaller height inward
+- Track maximum area seen
+
+#### Visual Explanation
+
+**Two Pointer Movement:**
+```
+height = [1, 8, 6, 2, 5, 4, 8, 3, 7]
+          L                       R
+
+Step 1: L=0(h=1), R=8(h=7)
+        area = min(1,7) * 8 = 8
+        Move L (smaller height)
+
+Step 2: L=1(h=8), R=8(h=7)
+        area = min(8,7) * 7 = 49 ✓
+        Move R (smaller height)
+
+Step 3: L=1(h=8), R=7(h=3)
+        area = min(8,3) * 6 = 18
+        Move R (smaller height)
+
+Continue until L meets R...
+Max area = 49
+```
+
+**Why move smaller height?**
+```
+|     |              |     |
+|     |              |     |
+|  |  |  Moving the  |  |  |
+|  |  |  taller one  |  |  |
+L     R  can't help  L  R
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=UuiTKBwPgAo)
+
+```js copy
+/**
+ * @param {number[]} height
+ * @return {number}
+ */
+var maxArea = function(height) {
+    let left = 0;
+    let right = height.length - 1;
+    let maxArea = 0;
+    
+    while (left < right) {
+        const width = right - left;
+        const minHeight = Math.min(height[left], height[right]);
+        const area = width * minHeight;
+        
+        maxArea = Math.max(maxArea, area);
+        
+        // Move pointer with smaller height
+        if (height[left] < height[right]) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    
+    return maxArea;
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is length of array
+- Space: O(1)

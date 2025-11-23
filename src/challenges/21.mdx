@@ -1,0 +1,73 @@
+### [Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/)
+
+- Use dummy node to simplify edge cases
+- Compare values from both lists and link smaller one
+- Continue until one list is exhausted
+- Link remaining nodes from non-empty list
+
+#### Visual Explanation
+
+**Merge Process:**
+```
+list1: 1 → 2 → 4
+list2: 1 → 3 → 4
+
+dummy → (build here)
+
+Step 1: Compare 1 vs 1, take list1
+dummy → 1
+list1: 2 → 4, list2: 1 → 3 → 4
+
+Step 2: Compare 2 vs 1, take list2
+dummy → 1 → 1
+list1: 2 → 4, list2: 3 → 4
+
+Step 3: Compare 2 vs 3, take list1
+dummy → 1 → 1 → 2
+list1: 4, list2: 3 → 4
+
+Continue...
+Result: 1 → 1 → 2 → 3 → 4 → 4
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=XIdigk956u0)
+
+```js copy
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} list1
+ * @param {ListNode} list2
+ * @return {ListNode}
+ */
+var mergeTwoLists = function(list1, list2) {
+    const dummy = new ListNode(0);
+    let current = dummy;
+    
+    while (list1 && list2) {
+        if (list1.val <= list2.val) {
+            current.next = list1;
+            list1 = list1.next;
+        } else {
+            current.next = list2;
+            list2 = list2.next;
+        }
+        current = current.next;
+    }
+    
+    // Link remaining nodes
+    current.next = list1 || list2;
+    
+    return dummy.next;
+};
+```
+
+##### Complexity
+
+- Time: O(n + m) where n and m are lengths of lists
+- Space: O(1)

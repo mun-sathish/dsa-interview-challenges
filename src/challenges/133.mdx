@@ -1,0 +1,89 @@
+### [Clone Graph](https://leetcode.com/problems/clone-graph/)
+
+- Use DFS/BFS with a hash map to track cloned nodes
+- For each node, create a clone and recursively clone its neighbors
+- Use the map to avoid infinite loops and duplicate clones
+
+#### Visual Explanation
+
+**Graph Cloning with HashMap:**
+```
+Original Graph:
+    1 --- 2
+    |     |
+    4 --- 3
+
+DFS Traversal:
+Step 1: Clone node 1
+  visited = {1: Node(1)}
+  
+Step 2: Clone neighbors of 1 (nodes 2, 4)
+  Clone node 2:
+    visited = {1: Node(1), 2: Node(2)}
+  
+Step 3: From node 2, clone neighbor 3
+  Clone node 3:
+    visited = {1: Node(1), 2: Node(2), 3: Node(3)}
+  
+Step 4: From node 3, visit node 4
+  Clone node 4:
+    visited = {1: Node(1), 2: Node(2), 3: Node(3), 4: Node(4)}
+  
+Step 5: Node 4 tries to visit 1 → Already in map! Use existing clone
+
+Cloned Graph:
+    1' --- 2'
+    |      |
+    4' --- 3'
+```
+
+**Key insight:**
+```
+HashMap prevents infinite loops:
+- If node already cloned → return existing clone
+- Else → create new clone, add to map, recurse
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=mQeF6bN8hMk)
+
+```js copy
+/**
+ * // Definition for a Node.
+ * function Node(val, neighbors) {
+ *    this.val = val === undefined ? 0 : val;
+ *    this.neighbors = neighbors === undefined ? [] : neighbors;
+ * };
+ */
+
+/**
+ * @param {Node} node
+ * @return {Node}
+ */
+var cloneGraph = function(node) {
+    if (!node) return null;
+    
+    const visited = new Map();
+    
+    function dfs(node) {
+        if (visited.has(node.val)) {
+            return visited.get(node.val);
+        }
+        
+        const clone = new Node(node.val);
+        visited.set(node.val, clone);
+        
+        for (let neighbor of node.neighbors) {
+            clone.neighbors.push(dfs(neighbor));
+        }
+        
+        return clone;
+    }
+    
+    return dfs(node);
+};
+```
+
+##### Complexity
+
+- Time: O(V + E) where V is vertices and E is edges
+- Space: O(V) for the hash map and recursion stack

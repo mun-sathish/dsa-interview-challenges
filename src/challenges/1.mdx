@@ -1,0 +1,60 @@
+### [Two Sum](https://leetcode.com/problems/two-sum/)
+
+- Use hash map to store value and its index
+- For each element, check if complement exists in map
+- Return indices when complement is found
+
+#### Visual Explanation
+
+**Step-by-step walkthrough:**
+```
+Input: nums = [2, 7, 11, 15], target = 9
+
+Step 1: i=0, num=2
+  complement = 9 - 2 = 7
+  map = {} (empty)
+  7 not found → store {2: 0}
+
+Step 2: i=1, num=7
+  complement = 9 - 7 = 2
+  map = {2: 0}
+  2 found at index 0! ✓
+  Return [0, 1]
+```
+
+**Hash Map Evolution:**
+```
+[]  →  [2]  →  [2, 7]
+       ↓         ↓
+     {2:0}   Found! Return [0,1]
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=KLlXCFG5TnA)
+
+```js copy
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+var twoSum = function(nums, target) {
+    const map = new Map();
+    
+    for (let i = 0; i < nums.length; i++) {
+        const complement = target - nums[i];
+        
+        if (map.has(complement)) {
+            return [map.get(complement), i];
+        }
+        
+        map.set(nums[i], i);
+    }
+    
+    return [];
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is length of array
+- Space: O(n) for hash map

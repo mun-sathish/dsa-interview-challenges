@@ -1,0 +1,67 @@
+### [Jump Game](https://leetcode.com/problems/jump-game/)
+
+- Track the farthest position reachable
+- For each position, check if it's reachable
+- Update farthest position based on current jump
+- Return true if we can reach the last index
+
+#### Visual Explanation
+
+**Greedy Reachability:**
+```
+nums = [2, 3, 1, 1, 4]
+        0  1  2  3  4
+
+i=0: maxReach = 0 + 2 = 2
+     Can reach: [0,1,2]
+
+i=1: maxReach = 1 + 3 = 4
+     Can reach: [0,1,2,3,4] ✓
+
+i=2: Already know we can reach end!
+
+Result: true
+```
+
+**Failing example:**
+```
+nums = [3, 2, 1, 0, 4]
+        0  1  2  3  4
+
+i=0: maxReach = 3
+i=1: maxReach = 3
+i=2: maxReach = 3
+i=3: maxReach = 3 (stuck!)
+i=4: Can't reach ✗
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=Yan0cv2cLy8)
+
+```js copy
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canJump = function(nums) {
+    let maxReach = 0;
+    
+    for (let i = 0; i < nums.length; i++) {
+        if (i > maxReach) {
+            return false;
+        }
+        
+        maxReach = Math.max(maxReach, i + nums[i]);
+        
+        if (maxReach >= nums.length - 1) {
+            return true;
+        }
+    }
+    
+    return true;
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is length of array
+- Space: O(1)

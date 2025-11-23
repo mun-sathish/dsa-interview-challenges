@@ -1,0 +1,112 @@
+### [Rotting Oranges](https://leetcode.com/problems/rotting-oranges/)
+
+- Use BFS to simulate the rotting process level by level
+- Start with all initially rotten oranges in the queue
+- Track time and count fresh oranges
+- Return time if all fresh oranges rot, otherwise -1
+
+#### Visual Explanation
+
+**Multi-source BFS (grid=[[2,1,1],[1,1,0],[0,1,1]]):**
+```
+Initial state (minute 0):
+2 1 1    Legend: 0=empty, 1=fresh, 2=rotten
+1 1 0
+0 1 1
+
+Queue: [(0,0)]
+Fresh count: 6
+
+Minute 1: Rot adjacent oranges
+2 2 1    Queue: [(0,1), (1,0)]
+2 1 0    Fresh: 4
+0 1 1
+
+Minute 2: Continue spreading
+2 2 2    Queue: [(0,2), (1,1), (2,1)]
+2 2 0    Fresh: 2
+0 1 1
+
+Minute 3: Continue spreading
+2 2 2    Queue: [(2,1)]
+2 2 0    Fresh: 1
+0 2 1
+
+Minute 4: Final orange rots
+2 2 2    Queue: [(2,2)]
+2 2 0    Fresh: 0 ✓
+0 2 2
+
+Total time: 4 minutes
+```
+
+**Key insight:**
+```
+Multi-source BFS:
+- Start with ALL rotten oranges in queue
+- Process level by level (each level = 1 minute)
+- Track fresh count to detect unreachable oranges
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=y704fEOx0s0)
+
+```js copy
+/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var orangesRotting = function(grid) {
+    const rows = grid.length;
+    const cols = grid[0].length;
+    const queue = [];
+    let fresh = 0;
+    let minutes = 0;
+    
+    // Find all rotten oranges and count fresh ones
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (grid[i][j] === 2) {
+                queue.push([i, j]);
+            } else if (grid[i][j] === 1) {
+                fresh++;
+            }
+        }
+    }
+    
+    if (fresh === 0) return 0;
+    
+    const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+    
+    while (queue.length > 0) {
+        const size = queue.length;
+        let rotted = false;
+        
+        for (let i = 0; i < size; i++) {
+            const [row, col] = queue.shift();
+            
+            for (let [dr, dc] of directions) {
+                const newRow = row + dr;
+                const newCol = col + dc;
+                
+                if (newRow >= 0 && newRow < rows && 
+                    newCol >= 0 && newCol < cols && 
+                    grid[newRow][newCol] === 1) {
+                    grid[newRow][newCol] = 2;
+                    queue.push([newRow, newCol]);
+                    fresh--;
+                    rotted = true;
+                }
+            }
+        }
+        
+        if (rotted) minutes++;
+    }
+    
+    return fresh === 0 ? minutes : -1;
+};
+```
+
+##### Complexity
+
+- Time: O(m * n) where m is rows and n is columns
+- Space: O(m * n) for the queue in worst case

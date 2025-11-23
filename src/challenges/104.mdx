@@ -1,0 +1,85 @@
+### [Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
+
+- Use recursion to traverse the tree
+- Return 0 for null nodes
+- Return 1 + max of left and right subtree depths
+- Base case handles leaf nodes
+
+#### Visual Explanation
+
+**Recursive Depth Calculation:**
+```
+Tree:       3
+           / \
+          9   20
+             /  \
+            15   7
+
+Recursive calls (bottom-up):
+maxDepth(null) = 0
+
+maxDepth(15):
+  left = 0, right = 0
+  return 1 + max(0,0) = 1
+
+maxDepth(7):
+  left = 0, right = 0
+  return 1 + max(0,0) = 1
+
+maxDepth(20):
+  left = maxDepth(15) = 1
+  right = maxDepth(7) = 1
+  return 1 + max(1,1) = 2
+
+maxDepth(9):
+  left = 0, right = 0
+  return 1 + max(0,0) = 1
+
+maxDepth(3):
+  left = maxDepth(9) = 1
+  right = maxDepth(20) = 2
+  return 1 + max(1,2) = 3 ✓
+
+Visual depth:
+    3 (depth 3)
+   / \
+  9   20 (depth 2)
+     /  \
+    15   7 (depth 1)
+```
+
+**Key insight:**
+```
+Depth = 1 + max(left_depth, right_depth)
+Base case: null node = depth 0
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=hTM3phVI6YQ)
+
+```js copy
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var maxDepth = function(root) {
+    if (!root) return 0;
+    
+    const leftDepth = maxDepth(root.left);
+    const rightDepth = maxDepth(root.right);
+    
+    return 1 + Math.max(leftDepth, rightDepth);
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is number of nodes
+- Space: O(h) where h is height (recursion stack)

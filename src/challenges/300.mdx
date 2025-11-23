@@ -1,0 +1,64 @@
+### [Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/)
+
+- Use dynamic programming array to track LIS ending at each index
+- For each element, check all previous elements
+- If current > previous, update dp[i] = max(dp[i], dp[j] + 1)
+- Return maximum value in dp array
+
+#### Visual Explanation
+
+**DP Array Evolution (nums=[10,9,2,5,3,7,101,18]):**
+```
+Index:   0   1   2   3   4   5   6    7
+nums:   10   9   2   5   3   7  101  18
+dp:      1   1   1   1   1   1   1    1  (initial)
+
+i=1 (9): No smaller elements before → dp[1]=1
+i=2 (2): No smaller elements before → dp[2]=1
+i=3 (5): 2<5 → dp[3]=max(1, dp[2]+1)=2
+i=4 (3): 2<3 → dp[4]=max(1, dp[2]+1)=2
+i=5 (7): 2<7, 5<7, 3<7 → dp[5]=max(1, dp[2]+1, dp[3]+1, dp[4]+1)=3
+i=6 (101): All<101 → dp[6]=max(..., dp[5]+1)=4
+i=7 (18): 2<18, 5<18, 3<18, 7<18 → dp[7]=max(..., dp[5]+1)=4 ✓
+
+Final dp: [1, 1, 1, 2, 2, 3, 4, 4]
+LIS: [2,5,7,101] or [2,5,7,18] = length 4
+```
+
+**Key insight:**
+```
+For each position i:
+  Check all j < i where nums[j] < nums[i]
+  dp[i] = max(dp[i], dp[j] + 1)
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=cjWnW0hdF1Y)
+
+```js copy
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var lengthOfLIS = function(nums) {
+    if (nums.length === 0) return 0;
+    
+    const dp = Array(nums.length).fill(1);
+    let maxLen = 1;
+    
+    for (let i = 1; i < nums.length; i++) {
+        for (let j = 0; j < i; j++) {
+            if (nums[i] > nums[j]) {
+                dp[i] = Math.max(dp[i], dp[j] + 1);
+            }
+        }
+        maxLen = Math.max(maxLen, dp[i]);
+    }
+    
+    return maxLen;
+};
+```
+
+##### Complexity
+
+- Time: O(n²) where n is length of array
+- Space: O(n) for dp array

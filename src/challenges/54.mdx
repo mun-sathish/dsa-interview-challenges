@@ -1,0 +1,95 @@
+### [Spiral Matrix](https://leetcode.com/problems/spiral-matrix/)
+
+- **Matrix Traversal Pattern**: Traverse in spiral order (right → down → left → up)
+- Track boundaries: top, bottom, left, right
+- Move in spiral, shrinking boundaries after each direction
+- Classic matrix traversal interview problem
+
+#### Visual Explanation
+
+**Spiral Traversal:**
+```
+Matrix:
+1  2  3  4
+5  6  7  8
+9  10 11 12
+
+Direction sequence: → ↓ ← ↑
+
+Step 1: Right (top row)
+→ → → →
+1  2  3  4    Result: [1,2,3,4]
+
+Step 2: Down (right column)
+        ↓
+        8     Result: [1,2,3,4,8]
+        ↓
+        12    Result: [1,2,3,4,8,12]
+
+Step 3: Left (bottom row)
+← ← ←
+11 10 9       Result: [1,2,3,4,8,12,11,10,9]
+
+Step 4: Up (left column)
+↑
+5             Result: [1,2,3,4,8,12,11,10,9,5]
+
+Step 5: Right (inner)
+  → →
+  6  7        Result: [1,2,3,4,8,12,11,10,9,5,6,7]
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=BJnMZNwUk1M)
+
+```js copy
+/**
+ * @param {number[][]} matrix
+ * @return {number[]}
+ */
+var spiralOrder = function(matrix) {
+    if (!matrix || matrix.length === 0) return [];
+    
+    const result = [];
+    let top = 0;
+    let bottom = matrix.length - 1;
+    let left = 0;
+    let right = matrix[0].length - 1;
+    
+    while (top <= bottom && left <= right) {
+        // Traverse right
+        for (let col = left; col <= right; col++) {
+            result.push(matrix[top][col]);
+        }
+        top++;
+        
+        // Traverse down
+        for (let row = top; row <= bottom; row++) {
+            result.push(matrix[row][right]);
+        }
+        right--;
+        
+        // Traverse left (if still have rows)
+        if (top <= bottom) {
+            for (let col = right; col >= left; col--) {
+                result.push(matrix[bottom][col]);
+            }
+            bottom--;
+        }
+        
+        // Traverse up (if still have columns)
+        if (left <= right) {
+            for (let row = bottom; row >= top; row--) {
+                result.push(matrix[row][left]);
+            }
+            left++;
+        }
+    }
+    
+    return result;
+};
+```
+
+##### Complexity
+
+- Time: O(m * n) where m is rows and n is columns
+- Space: O(1) excluding output array

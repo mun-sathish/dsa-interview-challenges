@@ -1,0 +1,78 @@
+### [Same Tree](https://leetcode.com/problems/same-tree/)
+
+- Use recursion to compare both trees simultaneously
+- Check if both nodes are null (base case - equal)
+- Check if one is null or values differ (not equal)
+- Recursively check left and right subtrees
+
+#### Visual Explanation
+
+**Simultaneous Tree Comparison:**
+```
+Tree p:     1          Tree q:     1
+           / \                    / \
+          2   3                  2   3
+
+Comparison steps:
+Step 1: Compare roots
+  p.val = 1, q.val = 1 ✓
+
+Step 2: Compare left subtrees
+  p.left.val = 2, q.left.val = 2 ✓
+  p.left.left = null, q.left.left = null ✓
+  p.left.right = null, q.left.right = null ✓
+
+Step 3: Compare right subtrees
+  p.right.val = 3, q.right.val = 3 ✓
+  p.right.left = null, q.right.left = null ✓
+  p.right.right = null, q.right.right = null ✓
+
+Result: Trees are identical ✓
+
+Different trees example:
+Tree p:  1        Tree q:  1
+        /                  \
+       2                    2
+       
+p.left = 2, q.left = null ✗
+Result: Not same
+```
+
+**Key insight:**
+```
+Base cases:
+- Both null → true
+- One null → false
+- Values differ → false
+Recursive: left same AND right same
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=vRbbcKXCxOw)
+
+```js copy
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {boolean}
+ */
+var isSameTree = function(p, q) {
+    if (!p && !q) return true;
+    if (!p || !q) return false;
+    if (p.val !== q.val) return false;
+    
+    return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is number of nodes
+- Space: O(h) where h is height (recursion stack)

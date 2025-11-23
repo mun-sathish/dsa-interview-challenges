@@ -1,0 +1,104 @@
+### [Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal/)
+
+- **Inorder**: Left → Root → Right
+- **Recursive**: Simple and intuitive
+- **Iterative**: Use stack, go left first, then process, then right
+
+#### Visual Explanation
+
+**Inorder Traversal (Left → Root → Right):**
+```
+Tree:       1
+           / \
+          2   3
+         / \
+        4   5
+
+Recursive Call Stack:
+visit(1) → visit(2) → visit(4)
+           ↓          ↓
+         visit(null) process(4) → [4]
+           ↓
+         process(2) → [4,2]
+           ↓
+         visit(5) → process(5) → [4,2,5]
+           ↓
+       process(1) → [4,2,5,1]
+           ↓
+       visit(3) → process(3) → [4,2,5,1,3]
+
+Iterative Stack Evolution:
+Stack: [1]         → go left
+Stack: [1,2]       → go left
+Stack: [1,2,4]     → go left
+Stack: [1,2,4,null] → pop 4, output 4
+Stack: [1,2]       → pop 2, output 2
+Stack: [1,2,5]     → go left from 5
+Stack: [1,2,5,null] → pop 5, output 5
+Stack: [1]         → pop 1, output 1
+Stack: [1,3]       → go left from 3
+Result: [4,2,5,1,3] ✓
+```
+
+**Key insight:**
+```
+Inorder = Left subtree + Root + Right subtree
+Used for BST to get sorted order
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=WLvU5EQVZqY)
+
+```js copy
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+
+// Recursive Solution
+var inorderTraversal = function(root) {
+    const result = [];
+    
+    function traverse(node) {
+        if (!node) return;
+        traverse(node.left);         // Left
+        result.push(node.val);       // Root
+        traverse(node.right);        // Right
+    }
+    
+    traverse(root);
+    return result;
+};
+
+// Iterative Solution using Stack
+var inorderTraversalIterative = function(root) {
+    const result = [];
+    const stack = [];
+    let current = root;
+    
+    while (current || stack.length > 0) {
+        // Go to leftmost node
+        while (current) {
+            stack.push(current);
+            current = current.left;
+        }
+        
+        // Process node
+        current = stack.pop();
+        result.push(current.val);
+        
+        // Move to right subtree
+        current = current.right;
+    }
+    
+    return result;
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is number of nodes
+- Space: O(h) for recursion stack or O(h) for iterative stack

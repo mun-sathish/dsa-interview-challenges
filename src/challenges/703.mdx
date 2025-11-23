@@ -1,0 +1,41 @@
+### [Kth Largest Element in a Stream](https://leetcode.com/problems/kth-largest-element-in-a-stream/)
+
+- Use min heap of size k to track k largest elements
+- Heap top is always the kth largest element
+- When adding new element, maintain heap size k
+
+```js copy
+/**
+ * @param {number} k
+ * @param {number[]} nums
+ */
+var KthLargest = function(k, nums) {
+    this.k = k;
+    this.heap = [];
+    
+    for (let num of nums) {
+        this.add(num);
+    }
+};
+
+/** 
+ * @param {number} val
+ * @return {number}
+ */
+KthLargest.prototype.add = function(val) {
+    if (this.heap.length < this.k) {
+        this.heap.push(val);
+        this.heap.sort((a, b) => a - b);
+    } else if (val > this.heap[0]) {
+        this.heap[0] = val;
+        this.heap.sort((a, b) => a - b);
+    }
+    
+    return this.heap[0];
+};
+```
+
+##### Complexity
+
+- Time: O(n log k) for initialization, O(log k) for add
+- Space: O(k) for the heap

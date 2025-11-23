@@ -1,0 +1,43 @@
+import Image from 'next/image';
+import { Cards } from 'nextra/components';
+import { HeroImg } from '@/components/hero-img';
+import "@/app/app.css";
+
+export const metadata = {
+  title: 'DSA Inteview Challenges',
+};
+
+<div className="text-center">
+<br/>
+# Welcome to DSA Inteview Challenges
+
+A curated list of data structures & algorithms challenges with solutions to crack engineering interviews
+
+<HeroImg />
+</div>
+
+<Cards num={3}>
+  <Cards.Card className="card" title="All DSA Patterns" href="/patterns/" />
+  <Cards.Card className="card" title="Difficulty" href="/difficulty/" />
+  <Cards.Card className="card" title="Topics" href="/topics/" />
+</Cards>
+
+<br />
+
+## 📚 Learning Resources
+
+Essential pattern guides to master DSA interviews:
+
+### Video Tutorials
+- [**20 Patterns to Master Dynamic Programming**](https://www.youtube.com/watch?v=DjYZk8nrXVY) - Comprehensive DP patterns guide
+- [**15 LeetCode Patterns**](https://www.youtube.com/watch?v=RYT08CaYq6A) - Essential coding patterns for interviews
+
+### Written Guides
+- [AlgoMaster: 20 DP Patterns](https://blog.algomaster.io/p/20-patterns-to-master-dynamic-programming)
+- [AlgoMaster: 15 LeetCode Patterns](https://blog.algomaster.io/p/15-leetcode-patterns)
+
+<br />
+
+<div className="text-center">
+  Show your support by giving a ★ <br /> to [DSA Inteview Challenges](https://github.com/sadanandpai/dsa-interview-challenges) repo
+</div>

@@ -1,0 +1,54 @@
+### [Min Stack](https://leetcode.com/problems/min-stack/)
+
+- Use two stacks: one for values, one for minimums
+- When pushing, also push current minimum to min stack
+- When popping, pop from both stacks
+- getMin returns top of min stack
+
+```js copy
+var MinStack = function() {
+    this.stack = [];
+    this.minStack = [];
+};
+
+/** 
+ * @param {number} val
+ * @return {void}
+ */
+MinStack.prototype.push = function(val) {
+    this.stack.push(val);
+    
+    if (this.minStack.length === 0) {
+        this.minStack.push(val);
+    } else {
+        this.minStack.push(Math.min(val, this.minStack[this.minStack.length - 1]));
+    }
+};
+
+/**
+ * @return {void}
+ */
+MinStack.prototype.pop = function() {
+    this.stack.pop();
+    this.minStack.pop();
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.top = function() {
+    return this.stack[this.stack.length - 1];
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.getMin = function() {
+    return this.minStack[this.minStack.length - 1];
+};
+```
+
+##### Complexity
+
+- Time: O(1) for all operations
+- Space: O(n) for both stacks

@@ -1,0 +1,81 @@
+### [3Sum](https://leetcode.com/problems/3sum/)
+
+- Sort the array first
+- Use one pointer for first element, then two pointers for remaining
+- Skip duplicates to avoid duplicate triplets
+- Move pointers based on sum comparison with target (0)
+
+#### Visual Explanation
+
+**Three Pointer Approach:**
+```
+Sorted: [-4, -1, -1, 0, 1, 2]
+         i   L           R
+
+Step 1: i=-4, L=-1, R=2
+        sum = -4 + (-1) + 2 = -3 < 0
+        Move L right →
+
+Step 2: i=-4, L=-1, R=2
+        sum = -4 + (-1) + 2 = -3 < 0
+        Move L right →
+
+Step 3: i=-4, L=0, R=2
+        sum = -4 + 0 + 2 = -2 < 0
+        Move L right →
+
+Step 4: i=-4, L=1, R=2
+        sum = -4 + 1 + 2 = -1 < 0
+        Move L right → (L meets R, done)
+
+Move i to next unique value...
+Continue until all triplets found
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=jzZsG8n2R9A)
+
+```js copy
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var threeSum = function(nums) {
+    const result = [];
+    nums.sort((a, b) => a - b);
+    
+    for (let i = 0; i < nums.length - 2; i++) {
+        // Skip duplicates for first element
+        if (i > 0 && nums[i] === nums[i - 1]) continue;
+        
+        let left = i + 1;
+        let right = nums.length - 1;
+        
+        while (left < right) {
+            const sum = nums[i] + nums[left] + nums[right];
+            
+            if (sum === 0) {
+                result.push([nums[i], nums[left], nums[right]]);
+                
+                // Skip duplicates for second element
+                while (left < right && nums[left] === nums[left + 1]) left++;
+                // Skip duplicates for third element
+                while (left < right && nums[right] === nums[right - 1]) right--;
+                
+                left++;
+                right--;
+            } else if (sum < 0) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+    }
+    
+    return result;
+};
+```
+
+##### Complexity
+
+- Time: O(n²) where n is length of array
+- Space: O(1) excluding output array

@@ -1,0 +1,80 @@
+### [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
+
+- Use sliding window with a hash set to track characters
+- Expand window by moving right pointer
+- Shrink window from left when duplicate found
+- Track maximum length seen
+
+#### Visual Explanation
+
+**Sliding Window Process:**
+```
+Input: s = "abcabcbb"
+
+Step 1: [a]bcabcbb
+        L R
+        set = {a}, maxLen = 1
+
+Step 2: [ab]cabcbb
+        L  R
+        set = {a,b}, maxLen = 2
+
+Step 3: [abc]abcbb
+        L   R
+        set = {a,b,c}, maxLen = 3 ✓
+
+Step 4: [abca]bcbb
+        L    R
+        Duplicate 'a' found!
+        Remove 'a': set = {b,c}
+
+Step 5: a[bca]bcbb
+          L  R
+        set = {b,c,a}, maxLen = 3
+
+Step 6: ab[cab]cbb
+           L  R
+        Duplicate 'b' found!
+        Shrink window...
+
+Final: maxLen = 3 (substring "abc")
+```
+
+**Window Movement:**
+```
+[---]         Window expands right →
+ [---]        Found duplicate
+  [--]        Shrink from left ←
+  [---]       Continue expanding →
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=wiGpQwVHdE0)
+
+```js copy
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+    const seen = new Set();
+    let left = 0;
+    let maxLen = 0;
+    
+    for (let right = 0; right < s.length; right++) {
+        while (seen.has(s[right])) {
+            seen.delete(s[left]);
+            left++;
+        }
+        
+        seen.add(s[right]);
+        maxLen = Math.max(maxLen, right - left + 1);
+    }
+    
+    return maxLen;
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is length of string
+- Space: O(min(n, m)) where m is charset size

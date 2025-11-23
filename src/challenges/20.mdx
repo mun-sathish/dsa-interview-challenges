@@ -1,0 +1,70 @@
+### [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/)
+
+- Use a stack to track opening brackets
+- For each closing bracket, check if it matches top of stack
+- Stack should be empty at the end for valid parentheses
+
+#### Visual Explanation
+
+**Stack Evolution:**
+```
+Input: s = "([)]"
+
+Step 1: char='('
+  stack: ['(']
+
+Step 2: char='['
+  stack: ['(', '[']
+
+Step 3: char=')'
+  Top of stack='[' ≠ '(' needed
+  Invalid! Return false ✗
+
+Valid example: s = "([])"
+  '(' → stack: ['(']
+  '[' → stack: ['(', '[']
+  ']' → matches '[', stack: ['(']
+  ')' → matches '(', stack: []
+  Empty stack ✓ Valid!
+```
+
+**Matching pairs:**
+```
+( matches )
+[ matches ]
+{ matches }
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=WTzjTskDFMg)
+
+```js copy
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var isValid = function(s) {
+    const stack = [];
+    const pairs = {
+        ')': '(',
+        '}': '{',
+        ']': '['
+    };
+    
+    for (let char of s) {
+        if (char === '(' || char === '{' || char === '[') {
+            stack.push(char);
+        } else {
+            if (stack.length === 0 || stack.pop() !== pairs[char]) {
+                return false;
+            }
+        }
+    }
+    
+    return stack.length === 0;
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is length of string
+- Space: O(n) for the stack

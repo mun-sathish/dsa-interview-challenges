@@ -1,0 +1,35 @@
+### [Subsets](https://leetcode.com/problems/subsets/)
+
+- Use backtracking to generate all subsets
+- For each element, choose to include or exclude
+- Add current subset to result at each step
+- Backtrack to explore other combinations
+
+```js copy
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var subsets = function(nums) {
+    const result = [];
+    const current = [];
+    
+    function backtrack(start) {
+        result.push([...current]);
+        
+        for (let i = start; i < nums.length; i++) {
+            current.push(nums[i]);
+            backtrack(i + 1);
+            current.pop();
+        }
+    }
+    
+    backtrack(0);
+    return result;
+};
+```
+
+##### Complexity
+
+- Time: O(2^n * n) where n is length of array
+- Space: O(n) for recursion stack

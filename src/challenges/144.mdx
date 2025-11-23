@@ -1,0 +1,96 @@
+### [Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-preorder-traversal/)
+
+- **Preorder**: Root → Left → Right
+- **Recursive**: Simple and intuitive
+- **Iterative**: Use stack, push right then left
+
+#### Visual Explanation
+
+**Preorder Traversal (Root → Left → Right):**
+```
+Tree:       1
+           / \
+          2   3
+         / \
+        4   5
+
+Recursive Execution:
+visit(1) → output 1 → [1]
+  ↓
+visit(2) → output 2 → [1,2]
+  ↓
+visit(4) → output 4 → [1,2,4]
+  ↓
+visit(5) → output 5 → [1,2,4,5]
+  ↓
+visit(3) → output 3 → [1,2,4,5,3] ✓
+
+Iterative Stack (push right first!):
+Stack: [1]           → pop 1, output 1
+Stack: [3,2]         → pop 2, output 2
+Stack: [3,5,4]       → pop 4, output 4
+Stack: [3,5]         → pop 5, output 5
+Stack: [3]           → pop 3, output 3
+Result: [1,2,4,5,3] ✓
+
+Why push right first?
+Stack is LIFO → right pushed first = left processed first
+```
+
+**Key insight:**
+```
+Preorder = Root + Left subtree + Right subtree
+Process node BEFORE visiting children
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=WLvU5EQVZqY)
+
+```js copy
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+
+// Recursive Solution
+var preorderTraversal = function(root) {
+    const result = [];
+    
+    function traverse(node) {
+        if (!node) return;
+        result.push(node.val);      // Root
+        traverse(node.left);         // Left
+        traverse(node.right);        // Right
+    }
+    
+    traverse(root);
+    return result;
+};
+
+// Iterative Solution using Stack
+var preorderTraversalIterative = function(root) {
+    if (!root) return [];
+    
+    const result = [];
+    const stack = [root];
+    
+    while (stack.length > 0) {
+        const node = stack.pop();
+        result.push(node.val);
+        
+        // Push right first so left is processed first
+        if (node.right) stack.push(node.right);
+        if (node.left) stack.push(node.left);
+    }
+    
+    return result;
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is number of nodes
+- Space: O(h) for recursion stack or O(h) for iterative stack

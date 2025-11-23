@@ -1,0 +1,87 @@
+### [Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
+
+- Use min heap to track smallest element from each list
+- Extract minimum, add to result, and add next node from same list
+- Continue until heap is empty
+
+#### Visual Explanation
+
+**Min Heap Approach:**
+```
+Lists:
+L1: 1 → 4 → 5
+L2: 1 → 3 → 4
+L3: 2 → 6
+
+Step 1: Heap = [1(L1), 1(L2), 2(L3)]
+        Extract min=1(L1)
+        Result: 1
+        Add next from L1: 4
+
+Step 2: Heap = [1(L2), 2(L3), 4(L1)]
+        Extract min=1(L2)
+        Result: 1 → 1
+        Add next from L2: 3
+
+Step 3: Heap = [2(L3), 3(L2), 4(L1)]
+        Extract min=2(L3)
+        Result: 1 → 1 → 2
+        Add next from L3: 6
+
+Continue until heap empty...
+Final: 1 → 1 → 2 → 3 → 4 → 4 → 5 → 6
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=q5a5OiGbT6Q)
+
+```js copy
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode[]} lists
+ * @return {ListNode}
+ */
+var mergeKLists = function(lists) {
+    if (!lists || lists.length === 0) return null;
+    
+    // Min heap implementation using array
+    const heap = [];
+    
+    // Add first node from each list
+    for (let list of lists) {
+        if (list) {
+            heap.push(list);
+        }
+    }
+    
+    heap.sort((a, b) => a.val - b.val);
+    
+    const dummy = new ListNode(0);
+    let current = dummy;
+    
+    while (heap.length > 0) {
+        // Extract min
+        const minNode = heap.shift();
+        current.next = minNode;
+        current = current.next;
+        
+        // Add next node from same list
+        if (minNode.next) {
+            heap.push(minNode.next);
+            heap.sort((a, b) => a.val - b.val);
+        }
+    }
+    
+    return dummy.next;
+};
+```
+
+##### Complexity
+
+- Time: O(N log k) where N is total nodes and k is number of lists
+- Space: O(k) for the heap

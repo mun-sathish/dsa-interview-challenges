@@ -1,0 +1,60 @@
+### [Jump Game II](https://leetcode.com/problems/jump-game-ii/)
+
+- Use greedy approach to find minimum jumps
+- Track current jump end and farthest reachable
+- Increment jumps when reaching current end
+- Update current end to farthest reachable
+
+#### Visual Explanation
+
+**Greedy Jump Strategy:**
+```
+nums = [2, 3, 1, 1, 4]
+        0  1  2  3  4
+
+Jump 1: From index 0 (value=2)
+        Can reach: [1, 2]
+        Farthest from [1,2]: index 1 reaches 4
+        Next jump end = 2
+
+Jump 2: From index 1 (value=3)
+        Can reach: [2, 3, 4]
+        Reached end! ✓
+
+Total jumps = 2
+Path: 0 → 1 → 4
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=dJ7sWiOoK7g)
+
+```js copy
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var jump = function(nums) {
+    let jumps = 0;
+    let currentEnd = 0;
+    let farthest = 0;
+    
+    for (let i = 0; i < nums.length - 1; i++) {
+        farthest = Math.max(farthest, i + nums[i]);
+        
+        if (i === currentEnd) {
+            jumps++;
+            currentEnd = farthest;
+            
+            if (currentEnd >= nums.length - 1) {
+                break;
+            }
+        }
+    }
+    
+    return jumps;
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is length of array
+- Space: O(1)

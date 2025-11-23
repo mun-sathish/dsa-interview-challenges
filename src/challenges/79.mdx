@@ -1,0 +1,55 @@
+### [Word Search](https://leetcode.com/problems/word-search/)
+
+- Use backtracking with DFS to explore all paths
+- Mark visited cells to avoid revisiting
+- Backtrack by unmarking cells after exploration
+- Check boundaries and character match at each step
+
+```js copy
+/**
+ * @param {character[][]} board
+ * @param {string} word
+ * @return {boolean}
+ */
+var exist = function(board, word) {
+    const rows = board.length;
+    const cols = board[0].length;
+    
+    function backtrack(row, col, index) {
+        if (index === word.length) return true;
+        
+        if (row < 0 || row >= rows || col < 0 || col >= cols || 
+            board[row][col] !== word[index]) {
+            return false;
+        }
+        
+        // Mark as visited
+        const temp = board[row][col];
+        board[row][col] = '#';
+        
+        // Explore all 4 directions
+        const found = backtrack(row + 1, col, index + 1) ||
+                     backtrack(row - 1, col, index + 1) ||
+                     backtrack(row, col + 1, index + 1) ||
+                     backtrack(row, col - 1, index + 1);
+        
+        // Backtrack: unmark
+        board[row][col] = temp;
+        
+        return found;
+    }
+    
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (backtrack(i, j, 0)) return true;
+        }
+    }
+    
+    return false;
+};
+```
+
+##### Complexity
+
+- Time: O(m * n * 4^L) where m,n are dimensions and L is word length
+- Space: O(L) for recursion stack

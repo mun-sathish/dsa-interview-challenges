@@ -1,0 +1,43 @@
+### [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
+
+- Use hash map to count frequencies
+- Use bucket sort or heap to find top k elements
+- Bucket sort approach: create buckets by frequency
+
+```js copy
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number[]}
+ */
+var topKFrequent = function(nums, k) {
+    const freqMap = new Map();
+    
+    // Count frequencies
+    for (let num of nums) {
+        freqMap.set(num, (freqMap.get(num) || 0) + 1);
+    }
+    
+    // Create buckets where index is frequency
+    const buckets = Array.from({ length: nums.length + 1 }, () => []);
+    
+    for (let [num, freq] of freqMap) {
+        buckets[freq].push(num);
+    }
+    
+    // Collect top k elements from highest frequency
+    const result = [];
+    for (let i = buckets.length - 1; i >= 0 && result.length < k; i--) {
+        if (buckets[i].length > 0) {
+            result.push(...buckets[i]);
+        }
+    }
+    
+    return result.slice(0, k);
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is length of array
+- Space: O(n) for hash map and buckets

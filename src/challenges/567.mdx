@@ -1,0 +1,65 @@
+### [Permutation in String](https://leetcode.com/problems/permutation-in-string/)
+
+- Use sliding window with character frequency comparison
+- Create frequency map of s1
+- Slide window of s1.length over s2
+- Check if window frequency matches s1 frequency
+
+```js copy
+/**
+ * @param {string} s1
+ * @param {string} s2
+ * @return {boolean}
+ */
+var checkInclusion = function(s1, s2) {
+    if (s1.length > s2.length) return false;
+    
+    const s1Count = {};
+    const windowCount = {};
+    
+    // Build frequency map for s1
+    for (let char of s1) {
+        s1Count[char] = (s1Count[char] || 0) + 1;
+    }
+    
+    // Initialize window
+    for (let i = 0; i < s1.length; i++) {
+        windowCount[s2[i]] = (windowCount[s2[i]] || 0) + 1;
+    }
+    
+    // Check if initial window matches
+    if (matches(s1Count, windowCount)) return true;
+    
+    // Slide the window
+    for (let i = s1.length; i < s2.length; i++) {
+        // Add new character
+        windowCount[s2[i]] = (windowCount[s2[i]] || 0) + 1;
+        
+        // Remove old character
+        const leftChar = s2[i - s1.length];
+        windowCount[leftChar]--;
+        if (windowCount[leftChar] === 0) {
+            delete windowCount[leftChar];
+        }
+        
+        if (matches(s1Count, windowCount)) return true;
+    }
+    
+    return false;
+};
+
+function matches(map1, map2) {
+    if (Object.keys(map1).length !== Object.keys(map2).length) return false;
+    
+    for (let key in map1) {
+        if (map1[key] !== map2[key]) return false;
+    }
+    
+    return true;
+}
+```
+
+##### Complexity
+
+- Time: O(n) where n is length of s2
+- Space: O(1) since we have at most 26 characters

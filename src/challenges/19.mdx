@@ -1,0 +1,74 @@
+### [Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
+
+- Use two pointers with n gap between them
+- Move both pointers until fast reaches end
+- Slow pointer will be at node before target
+- Remove target node by adjusting pointers
+
+#### Visual Explanation
+
+**Two Pointer Technique (n=2):**
+```
+List: 1 → 2 → 3 → 4 → 5, n=2
+
+Step 1: Create gap of n+1
+dummy → 1 → 2 → 3 → 4 → 5 → null
+slow    fast (move n+1 steps)
+
+Step 2: Move both until fast reaches null
+dummy → 1 → 2 → 3 → 4 → 5 → null
+        slow        fast
+
+Step 3: Remove node
+dummy → 1 → 2 → 3 ╳ 4 → 5 → null
+        slow    (skip 4)
+        
+Result: 1 → 2 → 3 → 5
+```
+
+**Why n+1 gap?** To position slow at node BEFORE target
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=XVuQxVej6y8)
+
+```js copy
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} n
+ * @return {ListNode}
+ */
+var removeNthFromEnd = function(head, n) {
+    const dummy = new ListNode(0);
+    dummy.next = head;
+    
+    let fast = dummy;
+    let slow = dummy;
+    
+    // Move fast n+1 steps ahead
+    for (let i = 0; i <= n; i++) {
+        fast = fast.next;
+    }
+    
+    // Move both until fast reaches end
+    while (fast) {
+        fast = fast.next;
+        slow = slow.next;
+    }
+    
+    // Remove nth node
+    slow.next = slow.next.next;
+    
+    return dummy.next;
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is length of list
+- Space: O(1)

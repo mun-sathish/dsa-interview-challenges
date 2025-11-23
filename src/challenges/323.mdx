@@ -1,0 +1,159 @@
+### [Number of Connected Components in an Undirected Graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
+
+- **DFS/BFS Pattern**: Count connected components
+- **Both approaches shown**: Recursive DFS and Iterative BFS
+- Build adjacency list, mark visited nodes
+- Each new DFS/BFS traversal = one component
+
+#### Visual Explanation
+
+**Connected Components (n=5, edges=[[0,1],[1,2],[3,4]]):**
+```
+Graph visualization:
+    0 --- 1 --- 2        3 --- 4
+
+Component 1: {0, 1, 2}
+Component 2: {3, 4}
+
+DFS Traversal:
+Step 1: Start at node 0 (unvisited)
+  DFS from 0: visits 0 → 1 → 2
+  Visited: {0, 1, 2}
+  Components: 1
+
+Step 2: Node 1 already visited, skip
+Step 3: Node 2 already visited, skip
+
+Step 4: Start at node 3 (unvisited)
+  DFS from 3: visits 3 → 4
+  Visited: {0, 1, 2, 3, 4}
+  Components: 2 ✓
+
+Step 5: Node 4 already visited, skip
+
+Total components: 2
+```
+
+**Key insight:**
+```
+For each unvisited node:
+  1. Start new DFS/BFS traversal
+  2. Mark all reachable nodes as visited
+  3. Increment component count
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=8f1XPm4WOUc)
+
+```js copy
+/**
+ * @param {number} n
+ * @param {number[][]} edges
+ * @return {number}
+ */
+
+// DFS Recursive Approach
+var countComponents = function(n, edges) {
+    // Build adjacency list
+    const graph = Array.from({ length: n }, () => []);
+    for (let [u, v] of edges) {
+        graph[u].push(v);
+        graph[v].push(u);
+    }
+    
+    const visited = new Set();
+    let components = 0;
+    
+    function dfs(node) {
+        visited.add(node);
+        
+        for (let neighbor of graph[node]) {
+            if (!visited.has(neighbor)) {
+                dfs(neighbor);
+            }
+        }
+    }
+    
+    for (let i = 0; i < n; i++) {
+        if (!visited.has(i)) {
+            dfs(i);
+            components++;
+        }
+    }
+    
+    return components;
+};
+
+// DFS Iterative Approach using Stack
+var countComponentsDFSIterative = function(n, edges) {
+    const graph = Array.from({ length: n }, () => []);
+    for (let [u, v] of edges) {
+        graph[u].push(v);
+        graph[v].push(u);
+    }
+    
+    const visited = new Set();
+    let components = 0;
+    
+    for (let i = 0; i < n; i++) {
+        if (!visited.has(i)) {
+            const stack = [i];
+            
+            while (stack.length > 0) {
+                const node = stack.pop();
+                
+                if (visited.has(node)) continue;
+                visited.add(node);
+                
+                for (let neighbor of graph[node]) {
+                    if (!visited.has(neighbor)) {
+                        stack.push(neighbor);
+                    }
+                }
+            }
+            
+            components++;
+        }
+    }
+    
+    return components;
+};
+
+// BFS Iterative Approach using Queue
+var countComponentsBFS = function(n, edges) {
+    const graph = Array.from({ length: n }, () => []);
+    for (let [u, v] of edges) {
+        graph[u].push(v);
+        graph[v].push(u);
+    }
+    
+    const visited = new Set();
+    let components = 0;
+    
+    for (let i = 0; i < n; i++) {
+        if (!visited.has(i)) {
+            const queue = [i];
+            visited.add(i);
+            
+            while (queue.length > 0) {
+                const node = queue.shift();
+                
+                for (let neighbor of graph[node]) {
+                    if (!visited.has(neighbor)) {
+                        visited.add(neighbor);
+                        queue.push(neighbor);
+                    }
+                }
+            }
+            
+            components++;
+        }
+    }
+    
+    return components;
+};
+```
+
+##### Complexity
+
+- Time: O(V + E) where V is vertices and E is edges
+- Space: O(V + E) for adjacency list and visited set

@@ -1,0 +1,37 @@
+### [Gas Station](https://leetcode.com/problems/gas-station/)
+
+- Track total gas and current tank
+- If current tank becomes negative, reset start position
+- If total gas is negative, no solution exists
+- Otherwise, return the start position
+
+```js copy
+/**
+ * @param {number[]} gas
+ * @param {number[]} cost
+ * @return {number}
+ */
+var canCompleteCircuit = function(gas, cost) {
+    let totalGas = 0;
+    let currentGas = 0;
+    let start = 0;
+    
+    for (let i = 0; i < gas.length; i++) {
+        const diff = gas[i] - cost[i];
+        totalGas += diff;
+        currentGas += diff;
+        
+        if (currentGas < 0) {
+            start = i + 1;
+            currentGas = 0;
+        }
+    }
+    
+    return totalGas >= 0 ? start : -1;
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is number of stations
+- Space: O(1)

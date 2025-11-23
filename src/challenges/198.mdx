@@ -1,0 +1,33 @@
+### [House Robber](https://leetcode.com/problems/house-robber/)
+
+- Use dynamic programming to track max money
+- At each house, choose to rob or skip
+- If rob: add current + max from two houses back
+- If skip: take max from previous house
+
+```js copy
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var rob = function(nums) {
+    if (nums.length === 0) return 0;
+    if (nums.length === 1) return nums[0];
+    
+    let prev2 = 0;
+    let prev1 = 0;
+    
+    for (let num of nums) {
+        const current = Math.max(prev1, prev2 + num);
+        prev2 = prev1;
+        prev1 = current;
+    }
+    
+    return prev1;
+};
+```
+
+##### Complexity
+
+- Time: O(n) where n is number of houses
+- Space: O(1)
