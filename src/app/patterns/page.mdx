@@ -59,7 +59,7 @@ slow fast
 - [Container With Most Water](/topics/two-pointers#container-with-most-water) - Find max area between two lines
 
 ```javascript
-// Two Sum II - Sorted Array
+// Example 1: Two Sum II - Sorted Array
 function twoSum(numbers, target) {
     let left = 0;
     let right = numbers.length - 1;
@@ -71,6 +71,28 @@ function twoSum(numbers, target) {
         else right--;
     }
     return [-1, -1];
+}
+
+// Example 2: Container With Most Water
+function maxArea(height) {
+    let left = 0;
+    let right = height.length - 1;
+    let maxArea = 0;
+    
+    while (left < right) {
+        const width = right - left;
+        const minHeight = Math.min(height[left], height[right]);
+        maxArea = Math.max(maxArea, width * minHeight);
+        
+        // Move pointer with smaller height
+        if (height[left] < height[right]) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    
+    return maxArea;
 }
 ```
 
@@ -84,7 +106,7 @@ function twoSum(numbers, target) {
 - Remove Element - Remove all instances of a value in-place
 
 ```javascript
-// Remove Duplicates from Sorted Array
+// Example 1: Remove Duplicates from Sorted Array
 function removeDuplicates(nums) {
     let slow = 0;
     
@@ -95,6 +117,18 @@ function removeDuplicates(nums) {
         }
     }
     return slow + 1;
+}
+
+// Example 2: Move Zeroes
+function moveZeroes(nums) {
+    let slow = 0;  // Position for next non-zero
+    
+    for (let fast = 0; fast < nums.length; fast++) {
+        if (nums[fast] !== 0) {
+            [nums[slow], nums[fast]] = [nums[fast], nums[slow]];
+            slow++;
+        }
+    }
 }
 ```
 
@@ -172,7 +206,7 @@ function maxSumSubarray(arr, k) {
 - [Longest Repeating Character Replacement](/topics/sliding-window#longest-repeating-character-replacement) - Longest substring after k replacements
 
 ```javascript
-// Longest Substring Without Repeating Characters
+// Example 1: Longest Substring Without Repeating Characters
 function lengthOfLongestSubstring(s) {
     const seen = new Set();
     let left = 0;
@@ -186,6 +220,29 @@ function lengthOfLongestSubstring(s) {
         seen.add(s[right]);
         maxLen = Math.max(maxLen, right - left + 1);
     }
+    return maxLen;
+}
+
+// Example 2: Longest Repeating Character Replacement
+function characterReplacement(s, k) {
+    const count = {};
+    let left = 0;
+    let maxCount = 0;
+    let maxLen = 0;
+    
+    for (let right = 0; right < s.length; right++) {
+        count[s[right]] = (count[s[right]] || 0) + 1;
+        maxCount = Math.max(maxCount, count[s[right]]);
+        
+        // If window size - max frequency > k, shrink window
+        while (right - left + 1 - maxCount > k) {
+            count[s[left]]--;
+            left++;
+        }
+        
+        maxLen = Math.max(maxLen, right - left + 1);
+    }
+    
     return maxLen;
 }
 ```
@@ -349,6 +406,28 @@ function binarySearch(arr, target) {
 - [Search in Rotated Sorted Array](/topics/binary-search#search-in-rotated-sorted-array) - Search in rotated array
 - [Find Minimum in Rotated Sorted Array](/topics/binary-search#find-minimum-in-rotated-sorted-array) - Find minimum in rotated array
 - Find Peak Element - Find any peak element in array
+
+```javascript
+// Example: Find Peak Element
+function findPeakElement(nums) {
+    let left = 0;
+    let right = nums.length - 1;
+    
+    while (left < right) {
+        const mid = left + Math.floor((right - left) / 2);
+        
+        if (nums[mid] > nums[mid + 1]) {
+            // Peak is on left side (including mid)
+            right = mid;
+        } else {
+            // Peak is on right side
+            left = mid + 1;
+        }
+    }
+    
+    return left;
+}
+```
 
 Modified binary search applies the binary search principle to problems where the search space isn't explicitly an array. The key insight is identifying a monotonic property that allows elimination of half the search space.
 
@@ -792,12 +871,21 @@ Dynamic Programming solves complex problems by breaking them down into simpler s
 - Word Break - Check if string can be segmented
 
 ```javascript
-// Fibonacci with Memoization
+// Example 1: Fibonacci with Memoization
 function fib(n, memo = {}) {
     if (n <= 1) return n;
     if (memo[n]) return memo[n];
     
     memo[n] = fib(n - 1, memo) + fib(n - 2, memo);
+    return memo[n];
+}
+
+// Example 2: Climbing Stairs
+function climbStairs(n, memo = {}) {
+    if (n <= 2) return n;
+    if (memo[n]) return memo[n];
+    
+    memo[n] = climbStairs(n - 1, memo) + climbStairs(n - 2, memo);
     return memo[n];
 }
 ```
