@@ -176,7 +176,7 @@ Variable Window:
 - Find All Anagrams in String - Find all anagram occurrences in string
 
 ```javascript
-// Maximum Sum Subarray of Size K
+// Example 1: Maximum Sum Subarray of Size K
 function maxSumSubarray(arr, k) {
     let maxSum = 0;
     let windowSum = 0;
@@ -193,6 +193,50 @@ function maxSumSubarray(arr, k) {
         maxSum = Math.max(maxSum, windowSum);
     }
     return maxSum;
+}
+
+// Example 2: Find All Anagrams in String
+function findAnagrams(s, p) {
+    const result = [];
+    if (s.length < p.length) return result;
+    
+    const pCount = {};
+    const windowCount = {};
+    
+    // Count characters in p
+    for (let char of p) {
+        pCount[char] = (pCount[char] || 0) + 1;
+    }
+    
+    // Initial window
+    for (let i = 0; i < p.length; i++) {
+        windowCount[s[i]] = (windowCount[s[i]] || 0) + 1;
+    }
+    
+    // Helper to compare objects
+    const isEqual = (obj1, obj2) => {
+        const keys1 = Object.keys(obj1);
+        const keys2 = Object.keys(obj2);
+        if (keys1.length !== keys2.length) return false;
+        return keys1.every(key => obj1[key] === obj2[key]);
+    };
+    
+    if (isEqual(pCount, windowCount)) result.push(0);
+    
+    // Slide window
+    for (let i = p.length; i < s.length; i++) {
+        windowCount[s[i]] = (windowCount[s[i]] || 0) + 1;
+        
+        const oldChar = s[i - p.length];
+        windowCount[oldChar]--;
+        if (windowCount[oldChar] === 0) delete windowCount[oldChar];
+        
+        if (isEqual(pCount, windowCount)) {
+            result.push(i - p.length + 1);
+        }
+    }
+    
+    return result;
 }
 ```
 
@@ -568,7 +612,47 @@ Postorder (Left-Right-Root): 4 → 5 → 2 → 3 → 1
 - Flatten Binary Tree to Linked List - Restructure tree using preorder sequence
 - Path Sum - Check if root-to-leaf path exists with given sum
 
-**Recursive Implementation:**
+**Example Solutions:**
+```javascript
+// Example 1: Path Sum
+function hasPathSum(root, targetSum) {
+    if (!root) return false;
+    
+    // Leaf node - check if path sum equals target
+    if (!root.left && !root.right) {
+        return root.val === targetSum;
+    }
+    
+    // Recurse on children with reduced target
+    return hasPathSum(root.left, targetSum - root.val) ||
+           hasPathSum(root.right, targetSum - root.val);
+}
+
+// Example 2: Flatten Binary Tree to Linked List
+function flatten(root) {
+    if (!root) return;
+    
+    // Flatten left and right subtrees
+    flatten(root.left);
+    flatten(root.right);
+    
+    // Store right subtree
+    const rightSubtree = root.right;
+    
+    // Move left subtree to right
+    root.right = root.left;
+    root.left = null;
+    
+    // Attach original right subtree to end
+    let current = root;
+    while (current.right) {
+        current = current.right;
+    }
+    current.right = rightSubtree;
+}
+```
+
+**Basic Preorder Traversal:**
 ```javascript
 function preorderTraversal(root) {
     const result = [];
@@ -623,6 +707,46 @@ function preorderIterative(root) {
 - Recover Binary Search Tree - Fix swapped nodes using inorder property
 
 **Recursive Implementation:**
+```javascript
+// Example: Validate Binary Search Tree
+function isValidBST(root) {
+    function validate(node, min, max) {
+        if (!node) return true;
+        
+        if (node.val <= min || node.val >= max) {
+            return false;
+        }
+        
+        return validate(node.left, min, node.val) &&
+               validate(node.right, node.val, max);
+    }
+    
+    return validate(root, -Infinity, Infinity);
+}
+
+// Example: Kth Smallest Element in BST
+function kthSmallest(root, k) {
+    let count = 0;
+    let result = null;
+    
+    function inorder(node) {
+        if (!node || result !== null) return;
+        
+        inorder(node.left);
+        count++;
+        if (count === k) {
+            result = node.val;
+            return;
+        }
+        inorder(node.right);
+    }
+    
+    inorder(root);
+    return result;
+}
+```
+
+**Basic Inorder Traversal:**
 ```javascript
 function inorderTraversal(root) {
     const result = [];
@@ -685,6 +809,39 @@ function inorderIterative(root) {
 - Delete Nodes and Return Forest - Delete nodes and return remaining trees
 
 **Recursive Implementation:**
+```javascript
+// Example: Maximum Depth of Binary Tree
+function maxDepth(root) {
+    if (!root) return 0;
+    
+    const leftDepth = maxDepth(root.left);
+    const rightDepth = maxDepth(root.right);
+    
+    return Math.max(leftDepth, rightDepth) + 1;
+}
+
+// Example: Diameter of Binary Tree
+function diameterOfBinaryTree(root) {
+    let diameter = 0;
+    
+    function height(node) {
+        if (!node) return 0;
+        
+        const leftHeight = height(node.left);
+        const rightHeight = height(node.right);
+        
+        // Update diameter at this node
+        diameter = Math.max(diameter, leftHeight + rightHeight);
+        
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+    
+    height(root);
+    return diameter;
+}
+```
+
+**Basic Postorder Traversal:**
 ```javascript
 function postorderTraversal(root) {
     const result = [];
@@ -1060,6 +1217,7 @@ function backtrack(result, current, choices) {
 - Letter Case Permutation - Generate all letter case combinations
 
 ```javascript
+// Example 1: Permutations
 function permute(nums) {
     const result = [];
     
@@ -1080,6 +1238,31 @@ function permute(nums) {
     }
     
     backtrack([], nums);
+    return result;
+}
+
+// Example 2: Letter Case Permutation
+function letterCasePermutation(s) {
+    const result = [];
+    
+    function backtrack(index, current) {
+        if (index === s.length) {
+            result.push(current);
+            return;
+        }
+        
+        const char = s[index];
+        if (isNaN(char)) {
+            // Letter: try both cases
+            backtrack(index + 1, current + char.toLowerCase());
+            backtrack(index + 1, current + char.toUpperCase());
+        } else {
+            // Digit: keep as is
+            backtrack(index + 1, current + char);
+        }
+    }
+    
+    backtrack(0, '');
     return result;
 }
 ```
@@ -1146,7 +1329,7 @@ Greedy algorithms make locally optimal choices at each step, hoping to find a gl
 - Meeting Rooms - Check if person can attend all meetings
 
 ```javascript
-// Jump Game
+// Example 1: Jump Game
 function canJump(nums) {
     let maxReach = 0;
     
@@ -1154,6 +1337,40 @@ function canJump(nums) {
         if (i > maxReach) return false;
         maxReach = Math.max(maxReach, i + nums[i]);
     }
+    return true;
+}
+
+// Example 2: Jump Game II
+function jump(nums) {
+    let jumps = 0;
+    let currentEnd = 0;
+    let farthest = 0;
+    
+    for (let i = 0; i < nums.length - 1; i++) {
+        farthest = Math.max(farthest, i + nums[i]);
+        
+        if (i === currentEnd) {
+            jumps++;
+            currentEnd = farthest;
+        }
+    }
+    
+    return jumps;
+}
+
+// Example 3: Meeting Rooms
+function canAttendMeetings(intervals) {
+    if (intervals.length === 0) return true;
+    
+    // Sort by start time
+    intervals.sort((a, b) => a[0] - b[0]);
+    
+    for (let i = 1; i < intervals.length; i++) {
+        if (intervals[i][0] < intervals[i - 1][1]) {
+            return false;  // Overlap found
+        }
+    }
+    
     return true;
 }
 ```
@@ -1166,7 +1383,7 @@ function canJump(nums) {
 - [Gas Station](/topics/greedy#gas-station) - Find starting gas station
 
 ```javascript
-// Non-overlapping Intervals
+// Example 1: Non-overlapping Intervals
 function eraseOverlapIntervals(intervals) {
     if (intervals.length === 0) return 0;
     
@@ -1184,6 +1401,27 @@ function eraseOverlapIntervals(intervals) {
         }
     }
     return count;
+}
+
+// Example 2: Minimum Number of Arrows to Burst Balloons
+function findMinArrowShots(points) {
+    if (points.length === 0) return 0;
+    
+    // Sort by end position
+    points.sort((a, b) => a[1] - b[1]);
+    
+    let arrows = 1;
+    let end = points[0][1];
+    
+    for (let i = 1; i < points.length; i++) {
+        if (points[i][0] > end) {
+            // Need new arrow
+            arrows++;
+            end = points[i][1];
+        }
+    }
+    
+    return arrows;
 }
 ```
 
@@ -1315,7 +1553,7 @@ Hash tables store key-value pairs and provide O(1) average-case lookup, insertio
 - First Unique Character - Find first non-repeating character
 
 ```javascript
-// Top K Frequent Elements
+// Example 1: Top K Frequent Elements
 function topKFrequent(nums, k) {
     const freq = new Map();
     
@@ -1329,6 +1567,43 @@ function topKFrequent(nums, k) {
         .sort((a, b) => b[1] - a[1])
         .slice(0, k)
         .map(([num]) => num);
+}
+
+// Example 2: Valid Anagram
+function isAnagram(s, t) {
+    if (s.length !== t.length) return false;
+    
+    const count = {};
+    
+    for (let char of s) {
+        count[char] = (count[char] || 0) + 1;
+    }
+    
+    for (let char of t) {
+        if (!count[char]) return false;
+        count[char]--;
+    }
+    
+    return true;
+}
+
+// Example 3: First Unique Character
+function firstUniqChar(s) {
+    const count = {};
+    
+    // Count frequencies
+    for (let char of s) {
+        count[char] = (count[char] || 0) + 1;
+    }
+    
+    // Find first unique
+    for (let i = 0; i < s.length; i++) {
+        if (count[s[i]] === 1) {
+            return i;
+        }
+    }
+    
+    return -1;
 }
 ```
 
@@ -1407,6 +1682,7 @@ A stack is a LIFO (Last In, First Out) data structure. Elements are added and re
 - Longest Valid Parentheses - Find longest valid parentheses substring
 
 ```javascript
+// Example 1: Valid Parentheses
 function isValid(s) {
     const stack = [];
     const pairs = { '(': ')', '[': ']', '{': '}' };
@@ -1422,6 +1698,28 @@ function isValid(s) {
     }
     
     return stack.length === 0;
+}
+
+// Example 2: Generate Parentheses
+function generateParenthesis(n) {
+    const result = [];
+    
+    function backtrack(current, open, close) {
+        if (current.length === 2 * n) {
+            result.push(current);
+            return;
+        }
+        
+        if (open < n) {
+            backtrack(current + '(', open + 1, close);
+        }
+        if (close < open) {
+            backtrack(current + ')', open, close + 1);
+        }
+    }
+    
+    backtrack('', 0, 0);
+    return result;
 }
 ```
 
@@ -1480,6 +1778,7 @@ A linked list is a linear data structure where elements are stored in nodes, and
 - Palindrome Linked List - Check if linked list is palindrome
 
 ```javascript
+// Example 1: Reverse Linked List
 function reverseList(head) {
     let prev = null;
     let current = head;
@@ -1492,6 +1791,37 @@ function reverseList(head) {
     }
     
     return prev;
+}
+
+// Example 2: Palindrome Linked List
+function isPalindrome(head) {
+    if (!head || !head.next) return true;
+    
+    // Find middle using fast & slow pointers
+    let slow = head, fast = head;
+    while (fast && fast.next) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    
+    // Reverse second half
+    let prev = null, current = slow;
+    while (current) {
+        const next = current.next;
+        current.next = prev;
+        prev = current;
+        current = next;
+    }
+    
+    // Compare both halves
+    let left = head, right = prev;
+    while (right) {
+        if (left.val !== right.val) return false;
+        left = left.next;
+        right = right.next;
+    }
+    
+    return true;
 }
 ```
 
@@ -1529,72 +1859,6 @@ function mergeTwoLists(l1, l2) {
 - [Reverse Linked List](/topics/linked-list#reverse-linked-list)
 - [Merge Two Sorted Lists](/topics/linked-list#merge-two-sorted-lists)
 - [Linked List Cycle](/topics/linked-list#linked-list-cycle)
-
----
-
-## Tree Traversals
-
-### Overview
-Tree traversals visit all nodes in a tree in a specific order. Three main types: Preorder, Inorder, Postorder.
-
-### Traversal Types
-
-#### 1. **Preorder (Root-Left-Right)**
-```javascript
-function preorder(root) {
-    if (!root) return [];
-    return [root.val, ...preorder(root.left), ...preorder(root.right)];
-}
-```
-
-#### 2. **Inorder (Left-Root-Right)**
-```javascript
-function inorder(root) {
-    if (!root) return [];
-    return [...inorder(root.left), root.val, ...inorder(root.right)];
-}
-```
-
-#### 3. **Postorder (Left-Right-Root)**
-```javascript
-function postorder(root) {
-    if (!root) return [];
-    return [...postorder(root.left), ...postorder(root.right), root.val];
-}
-```
-
-#### 4. **Level Order (BFS)**
-```javascript
-function levelOrder(root) {
-    if (!root) return [];
-    
-    const result = [];
-    const queue = [root];
-    
-    while (queue.length > 0) {
-        const levelSize = queue.length;
-        const level = [];
-        
-        for (let i = 0; i < levelSize; i++) {
-            const node = queue.shift();
-            level.push(node.val);
-            
-            if (node.left) queue.push(node.left);
-            if (node.right) queue.push(node.right);
-        }
-        
-        result.push(level);
-    }
-    
-    return result;
-}
-```
-
-### Key Problems
-- [Binary Tree Inorder Traversal](/topics/tree#binary-tree-inorder-traversal)
-- [Binary Tree Preorder Traversal](/topics/tree#binary-tree-preorder-traversal)
-- [Binary Tree Postorder Traversal](/topics/tree#binary-tree-postorder-traversal)
-- [Binary Tree Level Order Traversal](/topics/tree#binary-tree-level-order-traversal)
 
 ---
 
@@ -1711,6 +1975,7 @@ Interval problems involve working with ranges [start, end]. Common operations in
 - Interval List Intersections - Find intersection of two interval lists
 
 ```javascript
+// Example 1: Merge Intervals
 function merge(intervals) {
     if (intervals.length === 0) return [];
     
@@ -1729,6 +1994,30 @@ function merge(intervals) {
         } else {
             // Non-overlapping, add new interval
             result.push(current);
+        }
+    }
+    
+    return result;
+}
+
+// Example 2: Interval List Intersections
+function intervalIntersection(firstList, secondList) {
+    const result = [];
+    let i = 0, j = 0;
+    
+    while (i < firstList.length && j < secondList.length) {
+        const start = Math.max(firstList[i][0], secondList[j][0]);
+        const end = Math.min(firstList[i][1], secondList[j][1]);
+        
+        if (start <= end) {
+            result.push([start, end]);
+        }
+        
+        // Move pointer with smaller end
+        if (firstList[i][1] < secondList[j][1]) {
+            i++;
+        } else {
+            j++;
         }
     }
     
