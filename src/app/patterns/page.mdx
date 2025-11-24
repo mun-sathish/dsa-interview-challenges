@@ -52,6 +52,12 @@ slow fast
 ### Common Variations
 
 #### 1. **Opposite Direction (Converging)**
+
+**Example Problems:**
+- Two Sum II - Sorted Array - Find two numbers that add up to target
+- [3Sum](/topics/two-pointers#3sum) - Find all unique triplets that sum to zero
+- [Container With Most Water](/topics/two-pointers#container-with-most-water) - Find max area between two lines
+
 ```javascript
 // Two Sum II - Sorted Array
 function twoSum(numbers, target) {
@@ -71,6 +77,12 @@ function twoSum(numbers, target) {
 **Time**: O(n) | **Space**: O(1)
 
 #### 2. **Same Direction (Fast & Slow)**
+
+**Example Problems:**
+- Remove Duplicates from Sorted Array - Remove duplicates in-place
+- Move Zeroes - Move all zeros to end while maintaining order
+- Remove Element - Remove all instances of a value in-place
+
 ```javascript
 // Remove Duplicates from Sorted Array
 function removeDuplicates(nums) {
@@ -123,6 +135,12 @@ Variable Window:
 ### Common Variations
 
 #### 1. **Fixed Window Size**
+
+**Example Problems:**
+- Maximum Sum Subarray of Size K - Find max sum of k consecutive elements
+- Maximum Average Subarray - Find subarray with maximum average
+- Find All Anagrams in String - Find all anagram occurrences in string
+
 ```javascript
 // Maximum Sum Subarray of Size K
 function maxSumSubarray(arr, k) {
@@ -147,6 +165,12 @@ function maxSumSubarray(arr, k) {
 **Time**: O(n) | **Space**: O(1)
 
 #### 2. **Variable Window Size**
+
+**Example Problems:**
+- [Longest Substring Without Repeating Characters](/topics/sliding-window#longest-substring-without-repeating-characters) - Find longest substring without repeats
+- [Minimum Window Substring](/topics/sliding-window#minimum-window-substring) - Find smallest window containing all characters
+- [Longest Repeating Character Replacement](/topics/sliding-window#longest-repeating-character-replacement) - Longest substring after k replacements
+
 ```javascript
 // Longest Substring Without Repeating Characters
 function lengthOfLongestSubstring(s) {
@@ -291,6 +315,12 @@ Step 3: [7]
 ### Templates
 
 #### 1. **Standard Binary Search**
+
+**Example Problems:**
+- [Binary Search](/topics/binary-search#binary-search) - Find target in sorted array
+- Search Insert Position - Find index where target should be inserted
+- Find First and Last Position - Find start and end of target range
+
 ```javascript
 function binarySearch(arr, target) {
     let left = 0;
@@ -314,6 +344,11 @@ function binarySearch(arr, target) {
 **Time**: O(log n) | **Space**: O(1)
 
 #### 2. **Modified Binary Search (Search Space Reduction)**
+
+**Example Problems:**
+- [Search in Rotated Sorted Array](/topics/binary-search#search-in-rotated-sorted-array) - Search in rotated array
+- [Find Minimum in Rotated Sorted Array](/topics/binary-search#find-minimum-in-rotated-sorted-array) - Find minimum in rotated array
+- Find Peak Element - Find any peak element in array
 
 Modified binary search applies the binary search principle to problems where the search space isn't explicitly an array. The key insight is identifying a monotonic property that allows elimination of half the search space.
 
@@ -448,10 +483,11 @@ Postorder (Left-Right-Root): 4 → 5 → 2 → 3 → 1
 - Serializing a tree structure
 - Tree construction problems
 
-**Use Cases:**
-- Serialize/deserialize binary tree
-- Flatten binary tree to linked list
-- Path sum problems (checking from root)
+**Example Problems:**
+- [Binary Tree Preorder Traversal](/topics/tree#binary-tree-preorder-traversal) - Basic traversal implementation
+- Serialize and Deserialize Binary Tree - Convert tree to string representation
+- Flatten Binary Tree to Linked List - Restructure tree using preorder sequence
+- Path Sum - Check if root-to-leaf path exists with given sum
 
 **Recursive Implementation:**
 ```javascript
@@ -500,11 +536,12 @@ function preorderIterative(root) {
 - Finding kth smallest/largest in BST
 - Converting BST to sorted array
 
-**Use Cases:**
-- Binary Search Tree validation
-- Kth smallest element in BST
-- Recover Binary Search Tree
-- Inorder successor/predecessor
+**Example Problems:**
+- [Binary Tree Inorder Traversal](/topics/tree#binary-tree-inorder-traversal) - Basic traversal implementation
+- Validate Binary Search Tree - Check if tree is valid BST using inorder
+- Kth Smallest Element in BST - Find kth smallest using inorder traversal
+- Binary Tree Inorder Successor - Find next node in inorder sequence
+- Recover Binary Search Tree - Fix swapped nodes using inorder property
 
 **Recursive Implementation:**
 ```javascript
@@ -560,11 +597,13 @@ function inorderIterative(root) {
 - Bottom-up calculations (height, diameter)
 - Dependency resolution
 
-**Use Cases:**
-- Delete nodes in a tree
-- Calculate tree height/diameter
-- Lowest Common Ancestor
-- Binary tree maximum path sum
+**Example Problems:**
+- [Binary Tree Postorder Traversal](/topics/tree#binary-tree-postorder-traversal) - Basic traversal implementation
+- Maximum Depth of Binary Tree - Calculate height using postorder
+- Diameter of Binary Tree - Find longest path using postorder
+- Lowest Common Ancestor - Find LCA using postorder traversal
+- Binary Tree Maximum Path Sum - Calculate max path using postorder
+- Delete Nodes and Return Forest - Delete nodes and return remaining trees
 
 **Recursive Implementation:**
 ```javascript
@@ -669,6 +708,12 @@ Queue evolution:
 ### Implementations
 
 #### 1. **Standard BFS**
+
+**Example Problems:**
+- [Binary Tree Level Order Traversal](/topics/tree#binary-tree-level-order-traversal) - Traverse tree level by level
+- Binary Tree Right Side View - View tree from right side
+- Binary Tree Zigzag Level Order - Zigzag level order traversal
+
 ```javascript
 function bfs(root) {
     if (!root) return;
@@ -686,6 +731,12 @@ function bfs(root) {
 ```
 
 #### 2. **Level-Order BFS**
+
+**Example Problems:**
+- [Rotting Oranges](/topics/graph#rotting-oranges) - Find time for all oranges to rot
+- Shortest Path in Binary Matrix - Find shortest path in grid
+- Word Ladder - Find shortest transformation sequence
+
 ```javascript
 function levelOrder(root) {
     if (!root) return [];
@@ -734,6 +785,12 @@ Dynamic Programming solves complex problems by breaking them down into simpler s
 ### Core Concepts
 
 #### 1. **Memoization (Top-Down)**
+
+**Example Problems:**
+- [Climbing Stairs](/topics/dynamic-programming#climbing-stairs) - Count ways to climb stairs
+- Decode Ways - Count ways to decode a message
+- Word Break - Check if string can be segmented
+
 ```javascript
 // Fibonacci with Memoization
 function fib(n, memo = {}) {
@@ -746,6 +803,12 @@ function fib(n, memo = {}) {
 ```
 
 #### 2. **Tabulation (Bottom-Up)**
+
+**Example Problems:**
+- House Robber - Maximum money without robbing adjacent houses
+- Best Time to Buy and Sell Stock - Maximum profit from stock transactions
+- Maximum Product Subarray - Find subarray with maximum product
+
 ```javascript
 // Fibonacci with Tabulation
 function fib(n) {
@@ -762,6 +825,12 @@ function fib(n) {
 ### Common DP Patterns
 
 #### 1. **Linear DP (1D)**
+
+**Example Problems:**
+- House Robber - Rob houses to maximize money
+- [Coin Change](/topics/dynamic-programming#coin-change) - Minimum coins for amount
+- Longest Increasing Subsequence - Find LIS length
+
 ```javascript
 // House Robber
 function rob(nums) {
@@ -780,6 +849,12 @@ function rob(nums) {
 **Pattern**: `dp[i] = f(dp[i-1], dp[i-2], ...)`
 
 #### 2. **Grid DP (2D)**
+
+**Example Problems:**
+- Unique Paths - Count paths in grid
+- Minimum Path Sum - Find path with minimum sum
+- Edit Distance - Minimum operations to convert strings
+
 ```javascript
 // Unique Paths
 function uniquePaths(m, n) {
@@ -797,6 +872,12 @@ function uniquePaths(m, n) {
 **Pattern**: `dp[i][j] = f(dp[i-1][j], dp[i][j-1], ...)`
 
 #### 3. **Knapsack DP**
+
+**Example Problems:**
+- Partition Equal Subset Sum - Check if array can be partitioned
+- Target Sum - Count ways to reach target sum
+- Ones and Zeroes - Maximum subset with m zeros and n ones
+
 ```javascript
 // 0/1 Knapsack
 function knapsack(weights, values, capacity) {
@@ -884,6 +965,12 @@ function backtrack(result, current, choices) {
 ### Common Patterns
 
 #### 1. **Permutations**
+
+**Example Problems:**
+- [Permutations](/topics/backtracking#permutations) - Generate all permutations
+- Permutations II - Generate unique permutations with duplicates
+- Letter Case Permutation - Generate all letter case combinations
+
 ```javascript
 function permute(nums) {
     const result = [];
@@ -910,6 +997,12 @@ function permute(nums) {
 ```
 
 #### 2. **Subsets**
+
+**Example Problems:**
+- [Subsets](/topics/backtracking#subsets) - Generate all subsets
+- Subsets II - Generate unique subsets with duplicates
+- Combination Sum - Find combinations that sum to target
+
 ```javascript
 function subsets(nums) {
     const result = [];
@@ -958,6 +1051,12 @@ Greedy algorithms make locally optimal choices at each step, hoping to find a gl
 ### Common Patterns
 
 #### 1. **Activity Selection**
+
+**Example Problems:**
+- [Jump Game](/topics/greedy#jump-game) - Check if can reach last index
+- [Jump Game II](/topics/greedy#jump-game-ii) - Minimum jumps to reach end
+- Meeting Rooms - Check if person can attend all meetings
+
 ```javascript
 // Jump Game
 function canJump(nums) {
@@ -972,6 +1071,12 @@ function canJump(nums) {
 ```
 
 #### 2. **Interval Scheduling**
+
+**Example Problems:**
+- Non-overlapping Intervals - Minimum intervals to remove
+- Minimum Number of Arrows - Minimum arrows to burst balloons
+- [Gas Station](/topics/greedy#gas-station) - Find starting gas station
+
 ```javascript
 // Non-overlapping Intervals
 function eraseOverlapIntervals(intervals) {
@@ -1115,6 +1220,12 @@ Hash tables store key-value pairs and provide O(1) average-case lookup, insertio
 ### Common Patterns
 
 #### 1. **Frequency Counter**
+
+**Example Problems:**
+- [Top K Frequent Elements](/topics/heap#top-k-frequent-elements) - Find k most frequent elements
+- Valid Anagram - Check if two strings are anagrams
+- First Unique Character - Find first non-repeating character
+
 ```javascript
 // Top K Frequent Elements
 function topKFrequent(nums, k) {
@@ -1134,6 +1245,12 @@ function topKFrequent(nums, k) {
 ```
 
 #### 2. **Two Sum Pattern**
+
+**Example Problems:**
+- [Two Sum](/topics/hash-table#two-sum) - Find two numbers that sum to target
+- 4Sum - Find all unique quadruplets that sum to target
+- Two Sum II - Two sum in sorted array
+
 ```javascript
 function twoSum(nums, target) {
     const seen = new Map();
@@ -1150,6 +1267,12 @@ function twoSum(nums, target) {
 ```
 
 #### 3. **Group Anagrams**
+
+**Example Problems:**
+- [Group Anagrams](/topics/hash-table#group-anagrams) - Group strings that are anagrams
+- [Longest Consecutive Sequence](/topics/hash-table#longest-consecutive-sequence) - Find longest consecutive sequence
+- Isomorphic Strings - Check if two strings are isomorphic
+
 ```javascript
 function groupAnagrams(strs) {
     const groups = new Map();
@@ -1189,6 +1312,12 @@ A stack is a LIFO (Last In, First Out) data structure. Elements are added and re
 ### Common Patterns
 
 #### 1. **Valid Parentheses**
+
+**Example Problems:**
+- [Valid Parentheses](/topics/stack#valid-parentheses) - Check if parentheses are valid
+- [Generate Parentheses](/topics/stack#generate-parentheses) - Generate all valid parentheses
+- Longest Valid Parentheses - Find longest valid parentheses substring
+
 ```javascript
 function isValid(s) {
     const stack = [];
@@ -1209,6 +1338,12 @@ function isValid(s) {
 ```
 
 #### 2. **Monotonic Stack**
+
+**Example Problems:**
+- Next Greater Element - Find next greater element for each
+- [Daily Temperatures](/topics/stack#daily-temperatures) - Days until warmer temperature
+- Largest Rectangle in Histogram - Find largest rectangle area
+
 ```javascript
 // Next Greater Element
 function nextGreaterElement(nums) {
@@ -1250,6 +1385,12 @@ A linked list is a linear data structure where elements are stored in nodes, and
 ### Common Patterns
 
 #### 1. **Reverse Linked List**
+
+**Example Problems:**
+- [Reverse Linked List](/topics/linked-list#reverse-linked-list) - Reverse a linked list
+- Reverse Linked List II - Reverse between positions
+- Palindrome Linked List - Check if linked list is palindrome
+
 ```javascript
 function reverseList(head) {
     let prev = null;
@@ -1267,6 +1408,12 @@ function reverseList(head) {
 ```
 
 #### 2. **Merge Two Sorted Lists**
+
+**Example Problems:**
+- [Merge Two Sorted Lists](/topics/linked-list#merge-two-sorted-lists) - Merge two sorted lists
+- [Linked List Cycle](/topics/linked-list#linked-list-cycle) - Detect cycle in linked list
+- Remove Nth Node From End - Remove nth node from end
+
 ```javascript
 function mergeTwoLists(l1, l2) {
     const dummy = new ListNode(0);
@@ -1371,6 +1518,12 @@ Graphs consist of vertices (nodes) and edges connecting them. Can be directed or
 ### Common Algorithms
 
 #### 1. **Topological Sort (Kahn's Algorithm)**
+
+**Example Problems:**
+- [Course Schedule](/topics/graph#course-schedule) - Check if can finish all courses
+- Course Schedule II - Find order to finish courses
+- Alien Dictionary - Find order of characters in alien language
+
 ```javascript
 function topologicalSort(numCourses, prerequisites) {
     const graph = Array.from({ length: numCourses }, () => []);
@@ -1406,6 +1559,12 @@ function topologicalSort(numCourses, prerequisites) {
 ```
 
 #### 2. **Union Find (Disjoint Set)**
+
+**Example Problems:**
+- [Number of Islands](/topics/graph#number-of-islands) - Count number of islands
+- Graph Valid Tree - Check if graph is valid tree
+- Redundant Connection - Find redundant edge in graph
+
 ```javascript
 class UnionFind {
     constructor(n) {
@@ -1457,6 +1616,12 @@ Interval problems involve working with ranges [start, end]. Common operations in
 ### Common Patterns
 
 #### 1. **Merge Intervals**
+
+**Example Problems:**
+- [Merge Intervals](/topics/intervals#merge-intervals) - Merge overlapping intervals
+- [Insert Interval](/topics/intervals#insert-interval) - Insert and merge new interval
+- Interval List Intersections - Find intersection of two interval lists
+
 ```javascript
 function merge(intervals) {
     if (intervals.length === 0) return [];
@@ -1484,6 +1649,12 @@ function merge(intervals) {
 ```
 
 #### 2. **Insert Interval**
+
+**Example Problems:**
+- Insert Interval - Insert new interval and merge
+- Employee Free Time - Find common free time intervals
+- [Non-overlapping Intervals](/topics/intervals#non-overlapping-intervals) - Remove minimum intervals
+
 ```javascript
 function insert(intervals, newInterval) {
     const result = [];
@@ -1514,6 +1685,12 @@ function insert(intervals, newInterval) {
 ```
 
 #### 3. **Meeting Rooms II (Min Rooms Needed)**
+
+**Example Problems:**
+- [Meeting Rooms II](/topics/intervals#meeting-rooms-ii) - Minimum meeting rooms needed
+- Car Pooling - Check if can complete all trips
+- My Calendar I - Check if event can be booked
+
 ```javascript
 function minMeetingRooms(intervals) {
     if (intervals.length === 0) return 0;
