@@ -313,6 +313,98 @@ function binarySearch(arr, target) {
 
 **Time**: O(log n) | **Space**: O(1)
 
+#### 2. **Modified Binary Search (Search Space Reduction)**
+
+Modified binary search applies the binary search principle to problems where the search space isn't explicitly an array. The key insight is identifying a monotonic property that allows elimination of half the search space.
+
+**Common Use Cases:**
+- Finding minimum/maximum in rotated sorted arrays
+- Search in 2D matrices
+- Finding peak elements
+- Optimization problems (minimize/maximize a value)
+- Finding square roots, nth roots
+- Capacity/allocation problems
+
+**Template for Modified Binary Search:**
+```javascript
+function modifiedBinarySearch(searchSpace) {
+    let left = minValue;
+    let right = maxValue;
+    
+    while (left < right) {
+        const mid = left + Math.floor((right - left) / 2);
+        
+        if (isValid(mid)) {
+            // If mid satisfies condition, search left half
+            right = mid;
+        } else {
+            // Otherwise, search right half
+            left = mid + 1;
+        }
+    }
+    
+    return left;  // or right, they're equal
+}
+```
+
+**Example: Find Minimum in Rotated Sorted Array**
+```javascript
+function findMin(nums) {
+    let left = 0;
+    let right = nums.length - 1;
+    
+    while (left < right) {
+        const mid = left + Math.floor((right - left) / 2);
+        
+        // If mid element is greater than rightmost element,
+        // minimum must be in right half
+        if (nums[mid] > nums[right]) {
+            left = mid + 1;
+        } else {
+            // Otherwise, minimum is in left half (including mid)
+            right = mid;
+        }
+    }
+    
+    return nums[left];
+}
+```
+
+**Example: Search in Rotated Sorted Array**
+```javascript
+function search(nums, target) {
+    let left = 0;
+    let right = nums.length - 1;
+    
+    while (left <= right) {
+        const mid = left + Math.floor((right - left) / 2);
+        
+        if (nums[mid] === target) return mid;
+        
+        // Determine which half is sorted
+        if (nums[left] <= nums[mid]) {
+            // Left half is sorted
+            if (nums[left] <= target && target < nums[mid]) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        } else {
+            // Right half is sorted
+            if (nums[mid] < target && target <= nums[right]) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+    }
+    
+    return -1;
+}
+```
+
+**Key Insight**: Modified binary search works when you can define a condition that divides the search space into two parts where one part definitely doesn't contain the answer.
+
 ### Key Problems
 - [Binary Search](/topics/binary-search#binary-search)
 - [Search in Rotated Sorted Array](/topics/binary-search#search-in-rotated-sorted-array)
