@@ -1,0 +1,82 @@
+### [Longest Increasing Path in a Matrix](https://leetcode.com/problems/longest-increasing-path-in-a-matrix/)
+
+- Use DFS with memoization
+- For each cell, explore 4 directions
+- Only move to cells with greater value
+- Cache results to avoid recomputation
+
+#### Visual Explanation
+
+**DFS with Memoization:**
+```
+Matrix:
+[9,9,4]
+[6,6,8]
+[2,1,1]
+
+From cell (0,2)=4:
+4 → 6 → 9 (length 3)
+4 → 8 → 9 (length 3)
+
+From cell (2,0)=2:
+2 → 6 → 9 (length 3)
+
+Longest path: 1 → 2 → 6 → 9 (length 4)
+
+Memo cache prevents recalculating paths
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=wCc_nd-GiEc)
+
+```js copy
+/**
+ * @param {number[][]} matrix
+ * @return {number}
+ */
+var longestIncreasingPath = function(matrix) {
+    if (matrix.length === 0) return 0;
+    
+    const m = matrix.length;
+    const n = matrix[0].length;
+    const memo = Array.from({ length: m }, () => Array(n).fill(0));
+    const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+    
+    function dfs(i, j) {
+        // Return cached result
+        if (memo[i][j] !== 0) return memo[i][j];
+        
+        let maxLength = 1;
+        
+        // Explore all 4 directions
+        for (const [di, dj] of directions) {
+            const ni = i + di;
+            const nj = j + dj;
+            
+            // Check bounds and increasing condition
+            if (ni >= 0 && ni < m && nj >= 0 && nj < n && 
+                matrix[ni][nj] > matrix[i][j]) {
+                maxLength = Math.max(maxLength, 1 + dfs(ni, nj));
+            }
+        }
+        
+        memo[i][j] = maxLength;
+        return maxLength;
+    }
+    
+    let result = 0;
+    
+    // Try starting from each cell
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            result = Math.max(result, dfs(i, j));
+        }
+    }
+    
+    return result;
+};
+```
+
+##### Complexity
+
+- Time: O(m × n) each cell computed once with memoization
+- Space: O(m × n) for memoization cache

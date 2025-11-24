@@ -1,0 +1,90 @@
+### [Diagonal Traverse](https://leetcode.com/problems/diagonal-traverse/)
+
+- Traverse matrix diagonally alternating direction
+- Odd diagonals: go up-right
+- Even diagonals: go down-left
+- Handle boundaries carefully
+
+#### Visual Explanation
+
+**Diagonal Pattern:**
+```
+Matrix:
+[1, 2, 3]
+[4, 5, 6]
+[7, 8, 9]
+
+Diagonals:
+D0: [1] (down-left, but only 1 element)
+D1: [2,4] (up-right)
+D2: [3,5,7] (down-left)
+D3: [6,8] (up-right)
+D4: [9] (down-left, but only 1 element)
+
+Result: [1,2,4,7,5,3,6,8,9]
+
+Direction changes at boundaries:
+- Hit top/right → go down-left
+- Hit bottom/left → go up-right
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=lvRdFCMD_Ew)
+
+```js copy
+/**
+ * @param {number[][]} mat
+ * @return {number[]}
+ */
+var findDiagonalOrder = function(mat) {
+    if (mat.length === 0) return [];
+    
+    const m = mat.length;
+    const n = mat[0].length;
+    const result = [];
+    let row = 0, col = 0;
+    let goingUp = true;
+    
+    while (result.length < m * n) {
+        result.push(mat[row][col]);
+        
+        if (goingUp) {
+            // Moving up-right
+            if (col === n - 1) {
+                // Hit right edge, go down
+                row++;
+                goingUp = false;
+            } else if (row === 0) {
+                // Hit top edge, go right
+                col++;
+                goingUp = false;
+            } else {
+                // Continue up-right
+                row--;
+                col++;
+            }
+        } else {
+            // Moving down-left
+            if (row === m - 1) {
+                // Hit bottom edge, go right
+                col++;
+                goingUp = true;
+            } else if (col === 0) {
+                // Hit left edge, go down
+                row++;
+                goingUp = true;
+            } else {
+                // Continue down-left
+                row++;
+                col--;
+            }
+        }
+    }
+    
+    return result;
+};
+```
+
+##### Complexity
+
+- Time: O(m × n) visit each element once
+- Space: O(1) excluding output array

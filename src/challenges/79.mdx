@@ -1,9 +1,26 @@
 ### [Word Search](https://leetcode.com/problems/word-search/)
 
-- Use backtracking with DFS to explore all paths
-- Mark visited cells to avoid revisiting
-- Backtrack by unmarking cells after exploration
-- Check boundaries and character match at each step
+- Use DFS/backtracking to explore all paths
+- Mark visited cells temporarily during search
+- Restore cell after exploring (backtrack)
+- Check all four directions from each cell
+
+#### Visual Explanation
+
+**DFS Search Process:**
+```
+Board:          Word: "ABCCED"
+[A,B,C,E]
+[S,F,C,S]       Start at A(0,0)
+[A,D,E,E]       → B(0,1) → C(0,2) → C(1,2)
+                → E(1,3) → D(2,1) ✗
+                Backtrack and try E(2,2) ✓
+
+Mark visited: '#'
+Restore after exploring
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=pfiQ_PS1g8E)
 
 ```js copy
 /**
@@ -12,36 +29,41 @@
  * @return {boolean}
  */
 var exist = function(board, word) {
-    const rows = board.length;
-    const cols = board[0].length;
+    const m = board.length;
+    const n = board[0].length;
     
-    function backtrack(row, col, index) {
+    function dfs(i, j, index) {
+        // Found complete word
         if (index === word.length) return true;
         
-        if (row < 0 || row >= rows || col < 0 || col >= cols || 
-            board[row][col] !== word[index]) {
+        // Out of bounds or wrong character
+        if (i < 0 || i >= m || j < 0 || j >= n || 
+            board[i][j] !== word[index]) {
             return false;
         }
         
         // Mark as visited
-        const temp = board[row][col];
-        board[row][col] = '#';
+        const temp = board[i][j];
+        board[i][j] = '#';
         
         // Explore all 4 directions
-        const found = backtrack(row + 1, col, index + 1) ||
-                     backtrack(row - 1, col, index + 1) ||
-                     backtrack(row, col + 1, index + 1) ||
-                     backtrack(row, col - 1, index + 1);
+        const found = dfs(i + 1, j, index + 1) ||
+                      dfs(i - 1, j, index + 1) ||
+                      dfs(i, j + 1, index + 1) ||
+                      dfs(i, j - 1, index + 1);
         
-        // Backtrack: unmark
-        board[row][col] = temp;
+        // Restore cell (backtrack)
+        board[i][j] = temp;
         
         return found;
     }
     
-    for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < cols; j++) {
-            if (backtrack(i, j, 0)) return true;
+    // Try starting from each cell
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (dfs(i, j, 0)) {
+                return true;
+            }
         }
     }
     
@@ -51,5 +73,5 @@ var exist = function(board, word) {
 
 ##### Complexity
 
-- Time: O(m * n * 4^L) where m,n are dimensions and L is word length
+- Time: O(m × n × 4^L) where L is word length
 - Space: O(L) for recursion stack

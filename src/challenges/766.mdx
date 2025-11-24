@@ -1,0 +1,57 @@
+### [Toeplitz Matrix](https://leetcode.com/problems/toeplitz-matrix/)
+
+- Check if every diagonal from top-left to bottom-right has same elements
+- For each cell, compare with cell at (i-1, j-1)
+- Can optimize by checking only necessary cells
+- Simple one-pass solution
+
+#### Visual Explanation
+
+**Toeplitz Property:**
+```
+Valid Toeplitz:
+[1,2,3,4]
+[5,1,2,3]
+[9,5,1,2]
+
+Each diagonal has same values:
+[1,1,1] ✓
+[2,2,2] ✓
+[3,3] ✓
+[4] ✓
+[5,5] ✓
+[9] ✓
+
+Invalid:
+[1,2]
+[2,2]  ← (1,1) should be 1, not 2
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=7p8p-kZDIYo)
+
+```js copy
+/**
+ * @param {number[][]} matrix
+ * @return {boolean}
+ */
+var isToeplitzMatrix = function(matrix) {
+    const m = matrix.length;
+    const n = matrix[0].length;
+    
+    for (let i = 1; i < m; i++) {
+        for (let j = 1; j < n; j++) {
+            // Check if current cell equals top-left diagonal neighbor
+            if (matrix[i][j] !== matrix[i - 1][j - 1]) {
+                return false;
+            }
+        }
+    }
+    
+    return true;
+};
+```
+
+##### Complexity
+
+- Time: O(m × n) check each cell once
+- Space: O(1)

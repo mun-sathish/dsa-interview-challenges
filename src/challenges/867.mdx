@@ -1,0 +1,53 @@
+### [Transpose Matrix](https://leetcode.com/problems/transpose-matrix/)
+
+- Swap rows and columns
+- Create new matrix with swapped dimensions
+- Element at (i,j) goes to (j,i)
+- Simple transformation
+
+#### Visual Explanation
+
+**Transpose Operation:**
+```
+Original (2×3):     Transposed (3×2):
+[1,2,3]            [1,4]
+[4,5,6]       →    [2,5]
+                   [3,6]
+
+Mapping:
+(0,0)→(0,0): 1→1
+(0,1)→(1,0): 2→2
+(0,2)→(2,0): 3→3
+(1,0)→(0,1): 4→4
+(1,1)→(1,1): 5→5
+(1,2)→(2,1): 6→6
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=fMSJSS7eO1w)
+
+```js copy
+/**
+ * @param {number[][]} matrix
+ * @return {number[][]}
+ */
+var transpose = function(matrix) {
+    const m = matrix.length;
+    const n = matrix[0].length;
+    
+    // Create transposed matrix with swapped dimensions
+    const result = Array.from({ length: n }, () => Array(m).fill(0));
+    
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            result[j][i] = matrix[i][j];
+        }
+    }
+    
+    return result;
+};
+```
+
+##### Complexity
+
+- Time: O(m × n) visit each element once
+- Space: O(m × n) for result matrix

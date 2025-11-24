@@ -1,0 +1,84 @@
+### [Spiral Matrix II](https://leetcode.com/problems/spiral-matrix-ii/)
+
+- Generate n×n matrix filled with 1 to n²
+- Use four boundaries like Spiral Matrix I
+- Fill in spiral order: right → down → left → up
+- Increment counter for each cell
+
+#### Visual Explanation
+
+**Spiral Fill Process:**
+```
+n = 3, fill 1 to 9
+
+Step 1: Right → [1,2,3]
+                [ , , ]
+                [ , , ]
+
+Step 2: Down → [1,2,3]
+               [ , ,6]
+               [ , ,9]
+
+Step 3: Left ← [1,2,3]
+               [ , ,6]
+               [7,8,9]
+
+Step 4: Up ↑   [1,2,3]
+               [4, ,6]
+               [7,8,9]
+
+Step 5: Fill center [1,2,3]
+                    [4,5,6]
+                    [7,8,9]
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=BJnMZNwUk1M)
+
+```js copy
+/**
+ * @param {number} n
+ * @return {number[][]}
+ */
+var generateMatrix = function(n) {
+    const matrix = Array.from({ length: n }, () => Array(n).fill(0));
+    
+    let top = 0;
+    let bottom = n - 1;
+    let left = 0;
+    let right = n - 1;
+    let num = 1;
+    
+    while (top <= bottom && left <= right) {
+        // Traverse right
+        for (let j = left; j <= right; j++) {
+            matrix[top][j] = num++;
+        }
+        top++;
+        
+        // Traverse down
+        for (let i = top; i <= bottom; i++) {
+            matrix[i][right] = num++;
+        }
+        right--;
+        
+        // Traverse left
+        for (let j = right; j >= left; j--) {
+            matrix[bottom][j] = num++;
+        }
+        bottom--;
+        
+        // Traverse up
+        for (let i = bottom; i >= top; i--) {
+            matrix[i][left] = num++;
+        }
+        left++;
+    }
+    
+    return matrix;
+};
+```
+
+##### Complexity
+
+- Time: O(n²) visit each cell once
+- Space: O(1) excluding output matrix

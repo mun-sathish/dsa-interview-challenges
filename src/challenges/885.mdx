@@ -1,0 +1,77 @@
+### [Spiral Matrix III](https://leetcode.com/problems/spiral-matrix-iii/)
+
+- Start from given position and spiral outward
+- Move in pattern: right → down → left → up
+- Increase steps after every two directions
+- Only add valid coordinates to result
+
+#### Visual Explanation
+
+**Spiral Outward Pattern:**
+```
+Grid: 5×6, Start: (1,4)
+
+Steps pattern:
+1 right, 1 down,
+2 left, 2 up,
+3 right, 3 down,
+4 left, 4 up...
+
+Path (showing valid cells):
+    0 1 2 3 4 5
+0   . . . . 9 .
+1   . . . . S 1
+2   . . . 8 2 .
+3   . . 7 3 . .
+4   . 6 4 . . .
+5   5 . . . . .
+
+S=start, numbers show visit order
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=BJnMZNwUk1M)
+
+```js copy
+/**
+ * @param {number} rows
+ * @param {number} cols
+ * @param {number} rStart
+ * @param {number} cStart
+ * @return {number[][]}
+ */
+var spiralMatrixIII = function(rows, cols, rStart, cStart) {
+    const result = [[rStart, cStart]];
+    const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]]; // right, down, left, up
+    let steps = 1;
+    let dir = 0;
+    let r = rStart, c = cStart;
+    
+    while (result.length < rows * cols) {
+        // Move in current direction for 'steps' times
+        for (let i = 0; i < 2; i++) {
+            const [dr, dc] = directions[dir];
+            
+            for (let j = 0; j < steps; j++) {
+                r += dr;
+                c += dc;
+                
+                // Add if within bounds
+                if (r >= 0 && r < rows && c >= 0 && c < cols) {
+                    result.push([r, c]);
+                }
+            }
+            
+            dir = (dir + 1) % 4;  // Change direction
+        }
+        
+        steps++;  // Increase steps after every 2 directions
+    }
+    
+    return result;
+};
+```
+
+##### Complexity
+
+- Time: O(max(rows, cols)²) spiral can go outside grid
+- Space: O(1) excluding output array

@@ -1,0 +1,73 @@
+### [Lucky Numbers in a Matrix](https://leetcode.com/problems/lucky-numbers-in-a-matrix/)
+
+- Lucky number = minimum in its row AND maximum in its column
+- Find min in each row, check if it's max in its column
+- Can have at most one lucky number
+- Two-pass solution or optimized single pass
+
+#### Visual Explanation
+
+**Finding Lucky Numbers:**
+```
+Matrix:
+[3, 7, 8]
+[9, 11, 13]
+[15, 16, 17]
+
+Row minimums: [3, 9, 15]
+Col maximums: [15, 16, 17]
+
+Check each row min:
+- 3: max in col 0? 15 ≠ 3 ✗
+- 9: max in col 0? 15 ≠ 9 ✗
+- 15: max in col 0? 15 = 15 ✓
+
+Lucky number: 15
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=fMSJSS7eO1w)
+
+```js copy
+/**
+ * @param {number[][]} matrix
+ * @return {number[]}
+ */
+var luckyNumbers = function(matrix) {
+    const m = matrix.length;
+    const n = matrix[0].length;
+    const result = [];
+    
+    // Find minimum in each row
+    for (let i = 0; i < m; i++) {
+        let minVal = matrix[i][0];
+        let minCol = 0;
+        
+        for (let j = 1; j < n; j++) {
+            if (matrix[i][j] < minVal) {
+                minVal = matrix[i][j];
+                minCol = j;
+            }
+        }
+        
+        // Check if this min is also max in its column
+        let isMaxInCol = true;
+        for (let k = 0; k < m; k++) {
+            if (matrix[k][minCol] > minVal) {
+                isMaxInCol = false;
+                break;
+            }
+        }
+        
+        if (isMaxInCol) {
+            result.push(minVal);
+        }
+    }
+    
+    return result;
+};
+```
+
+##### Complexity
+
+- Time: O(m × n) check each element
+- Space: O(1) excluding output

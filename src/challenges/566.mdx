@@ -1,0 +1,65 @@
+### [Reshape the Matrix](https://leetcode.com/problems/reshape-the-matrix/)
+
+- Check if reshape is possible: m×n must equal r×c
+- Flatten matrix to 1D, then reshape to new dimensions
+- Use formula: row = index / c, col = index % c
+- Single pass through original matrix
+
+#### Visual Explanation
+
+**Reshape Process:**
+```
+Original (2×2):  Flatten:      Reshape (1×4):
+[1,2]           [1,2,3,4]     [1,2,3,4]
+[3,4]
+
+Original (2×4):  Flatten:      Reshape (4×2):
+[1,2,3,4]       [1,2,3,4,     [1,2]
+[5,6,7,8]        5,6,7,8]     [3,4]
+                              [5,6]
+                              [7,8]
+
+Index mapping:
+1D index → 2D: row = idx / cols, col = idx % cols
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=yAglbHQCLF8)
+
+```js copy
+/**
+ * @param {number[][]} mat
+ * @param {number} r
+ * @param {number} c
+ * @return {number[][]}
+ */
+var matrixReshape = function(mat, r, c) {
+    const m = mat.length;
+    const n = mat[0].length;
+    
+    // Check if reshape is possible
+    if (m * n !== r * c) {
+        return mat;
+    }
+    
+    const result = Array.from({ length: r }, () => Array(c).fill(0));
+    
+    for (let i = 0; i < m * n; i++) {
+        // Original matrix position
+        const origRow = Math.floor(i / n);
+        const origCol = i % n;
+        
+        // New matrix position
+        const newRow = Math.floor(i / c);
+        const newCol = i % c;
+        
+        result[newRow][newCol] = mat[origRow][origCol];
+    }
+    
+    return result;
+};
+```
+
+##### Complexity
+
+- Time: O(m × n) single pass through all elements
+- Space: O(m × n) for result matrix

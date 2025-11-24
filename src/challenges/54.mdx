@@ -1,42 +1,31 @@
 ### [Spiral Matrix](https://leetcode.com/problems/spiral-matrix/)
 
-- **Matrix Traversal Pattern**: Traverse in spiral order (right → down → left → up)
-- Track boundaries: top, bottom, left, right
-- Move in spiral, shrinking boundaries after each direction
-- Classic matrix traversal interview problem
+- Use four boundaries: top, bottom, left, right
+- Traverse in spiral order: right → down → left → up
+- Shrink boundaries after each direction
+- Continue until all elements visited
 
 #### Visual Explanation
 
 **Spiral Traversal:**
 ```
-Matrix:
-1  2  3  4
-5  6  7  8
-9  10 11 12
+Matrix: [[1,2,3],
+         [4,5,6],
+         [7,8,9]]
 
-Direction sequence: → ↓ ← ↑
+Step 1: Right → [1,2,3]
+        top++
 
-Step 1: Right (top row)
-→ → → →
-1  2  3  4    Result: [1,2,3,4]
+Step 2: Down → [6,9]
+        right--
 
-Step 2: Down (right column)
-        ↓
-        8     Result: [1,2,3,4,8]
-        ↓
-        12    Result: [1,2,3,4,8,12]
+Step 3: Left ← [8,7]
+        bottom--
 
-Step 3: Left (bottom row)
-← ← ←
-11 10 9       Result: [1,2,3,4,8,12,11,10,9]
+Step 4: Up ↑ [4]
+        left++
 
-Step 4: Up (left column)
-↑
-5             Result: [1,2,3,4,8,12,11,10,9,5]
-
-Step 5: Right (inner)
-  → →
-  6  7        Result: [1,2,3,4,8,12,11,10,9,5,6,7]
+Result: [1,2,3,6,9,8,7,4,5]
 ```
 
 📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=BJnMZNwUk1M)
@@ -47,7 +36,7 @@ Step 5: Right (inner)
  * @return {number[]}
  */
 var spiralOrder = function(matrix) {
-    if (!matrix || matrix.length === 0) return [];
+    if (matrix.length === 0) return [];
     
     const result = [];
     let top = 0;
@@ -57,29 +46,29 @@ var spiralOrder = function(matrix) {
     
     while (top <= bottom && left <= right) {
         // Traverse right
-        for (let col = left; col <= right; col++) {
-            result.push(matrix[top][col]);
+        for (let j = left; j <= right; j++) {
+            result.push(matrix[top][j]);
         }
         top++;
         
         // Traverse down
-        for (let row = top; row <= bottom; row++) {
-            result.push(matrix[row][right]);
+        for (let i = top; i <= bottom; i++) {
+            result.push(matrix[i][right]);
         }
         right--;
         
         // Traverse left (if still have rows)
         if (top <= bottom) {
-            for (let col = right; col >= left; col--) {
-                result.push(matrix[bottom][col]);
+            for (let j = right; j >= left; j--) {
+                result.push(matrix[bottom][j]);
             }
             bottom--;
         }
         
         // Traverse up (if still have columns)
         if (left <= right) {
-            for (let row = bottom; row >= top; row--) {
-                result.push(matrix[row][left]);
+            for (let i = bottom; i >= top; i--) {
+                result.push(matrix[i][left]);
             }
             left++;
         }
@@ -91,5 +80,5 @@ var spiralOrder = function(matrix) {
 
 ##### Complexity
 
-- Time: O(m * n) where m is rows and n is columns
+- Time: O(m × n) where m is rows and n is columns
 - Space: O(1) excluding output array

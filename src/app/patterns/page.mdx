@@ -22,6 +22,7 @@ A comprehensive guide to all Data Structures and Algorithms patterns with detail
 14. [Tree Traversals](#tree-traversals)
 15. [Graph Algorithms](#graph-algorithms)
 16. [Intervals](#intervals)
+17. [Matrix / 2D Arrays](#matrix--2d-arrays)
 
 ---
 
@@ -2100,6 +2101,357 @@ function minMeetingRooms(intervals) {
 
 ---
 
+## Matrix / 2D Arrays
+
+### Overview
+Matrix problems involve working with 2D arrays and grids. Common operations include traversal, transformation, and searching in 2D space.
+
+### When to Use
+- Grid-based problems
+- Image processing
+- Game boards (Sudoku, Tic-Tac-Toe)
+- Path finding in 2D space
+- Matrix transformations
+
+### Visual Pattern
+```
+Matrix Traversal Patterns:
+
+Row-wise:              Column-wise:          Diagonal:
+[1, 2, 3]              [1, 4, 7]            [1, 5, 9]
+[4, 5, 6]      →       [2, 5, 8]     →      [2, 6]
+[7, 8, 9]              [3, 6, 9]            [3, 7]
+                                            [4, 8]
+
+Spiral:                Layer-by-layer:
+1 → 2 → 3              Outer → Inner
+        ↓              [1, 2, 3]
+8   9   4              [8, 9, 4]
+↑       ↓              [7, 6, 5]
+7 ← 6 ← 5
+```
+
+### Common Patterns
+
+#### 1. **Matrix Traversal**
+
+**Example Problems:**
+- [Spiral Matrix](/topics/matrix#spiral-matrix) - Traverse matrix in spiral order
+- [Spiral Matrix II](/topics/matrix#spiral-matrix-ii) - Generate spiral matrix
+- [Diagonal Traverse](/topics/matrix#diagonal-traverse) - Traverse diagonals
+- [Spiral Matrix III](/topics/matrix#spiral-matrix-iii) - Spiral walk on grid
+
+```javascript
+// Example 1: Spiral Matrix
+function spiralOrder(matrix) {
+    if (!matrix.length) return [];
+    
+    const result = [];
+    let top = 0, bottom = matrix.length - 1;
+    let left = 0, right = matrix[0].length - 1;
+    
+    while (top <= bottom && left <= right) {
+        // Traverse right
+        for (let col = left; col <= right; col++) {
+            result.push(matrix[top][col]);
+        }
+        top++;
+        
+        // Traverse down
+        for (let row = top; row <= bottom; row++) {
+            result.push(matrix[row][right]);
+        }
+        right--;
+        
+        // Traverse left
+        if (top <= bottom) {
+            for (let col = right; col >= left; col--) {
+                result.push(matrix[bottom][col]);
+            }
+            bottom--;
+        }
+        
+        // Traverse up
+        if (left <= right) {
+            for (let row = bottom; row >= top; row--) {
+                result.push(matrix[row][left]);
+            }
+            left++;
+        }
+    }
+    
+    return result;
+}
+
+// Example 2: Diagonal Traverse
+function findDiagonalOrder(mat) {
+    if (!mat.length) return [];
+    
+    const m = mat.length, n = mat[0].length;
+    const result = [];
+    let row = 0, col = 0;
+    let goingUp = true;
+    
+    while (result.length < m * n) {
+        result.push(mat[row][col]);
+        
+        if (goingUp) {
+            if (col === n - 1) {
+                row++;
+                goingUp = false;
+            } else if (row === 0) {
+                col++;
+                goingUp = false;
+            } else {
+                row--;
+                col++;
+            }
+        } else {
+            if (row === m - 1) {
+                col++;
+                goingUp = true;
+            } else if (col === 0) {
+                row++;
+                goingUp = true;
+            } else {
+                row++;
+                col--;
+            }
+        }
+    }
+    
+    return result;
+}
+```
+
+**Time**: O(m × n) | **Space**: O(1) excluding output
+
+#### 2. **Matrix Transformation**
+
+**Example Problems:**
+- [Rotate Image](/topics/matrix#rotate-image) - Rotate matrix 90 degrees
+- [Transpose Matrix](/topics/matrix#transpose-matrix) - Transpose a matrix
+- [Set Matrix Zeroes](/topics/matrix#set-matrix-zeroes) - Set rows/cols to zero
+- [Reshape the Matrix](/topics/matrix#reshape-the-matrix) - Reshape matrix dimensions
+
+```javascript
+// Example 1: Rotate Image (90 degrees clockwise)
+function rotate(matrix) {
+    const n = matrix.length;
+    
+    // Transpose
+    for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+            [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]];
+        }
+    }
+    
+    // Reverse each row
+    for (let i = 0; i < n; i++) {
+        matrix[i].reverse();
+    }
+}
+
+// Example 2: Set Matrix Zeroes
+function setZeroes(matrix) {
+    const m = matrix.length, n = matrix[0].length;
+    let firstRowZero = false, firstColZero = false;
+    
+    // Check if first row/col should be zero
+    for (let j = 0; j < n; j++) {
+        if (matrix[0][j] === 0) firstRowZero = true;
+    }
+    for (let i = 0; i < m; i++) {
+        if (matrix[i][0] === 0) firstColZero = true;
+    }
+    
+    // Use first row/col as markers
+    for (let i = 1; i < m; i++) {
+        for (let j = 1; j < n; j++) {
+            if (matrix[i][j] === 0) {
+                matrix[i][0] = 0;
+                matrix[0][j] = 0;
+            }
+        }
+    }
+    
+    // Set zeros based on markers
+    for (let i = 1; i < m; i++) {
+        for (let j = 1; j < n; j++) {
+            if (matrix[i][0] === 0 || matrix[0][j] === 0) {
+                matrix[i][j] = 0;
+            }
+        }
+    }
+    
+    // Handle first row/col
+    if (firstRowZero) {
+        for (let j = 0; j < n; j++) matrix[0][j] = 0;
+    }
+    if (firstColZero) {
+        for (let i = 0; i < m; i++) matrix[i][0] = 0;
+    }
+}
+```
+
+**Time**: O(m × n) | **Space**: O(1)
+
+#### 3. **Matrix Search**
+
+**Example Problems:**
+- [Search a 2D Matrix](/topics/matrix#search-a-2d-matrix) - Binary search in sorted matrix
+- [Search a 2D Matrix II](/topics/matrix#search-a-2d-matrix-ii) - Search in row/col sorted matrix
+- [Kth Smallest Element in Sorted Matrix](/topics/matrix#kth-smallest-element-in-a-sorted-matrix) - Find kth smallest
+- [Lucky Numbers in a Matrix](/topics/matrix#lucky-numbers-in-a-matrix) - Find lucky numbers
+
+```javascript
+// Example 1: Search a 2D Matrix (fully sorted)
+function searchMatrix(matrix, target) {
+    if (!matrix.length) return false;
+    
+    const m = matrix.length, n = matrix[0].length;
+    let left = 0, right = m * n - 1;
+    
+    while (left <= right) {
+        const mid = Math.floor((left + right) / 2);
+        const row = Math.floor(mid / n);
+        const col = mid % n;
+        const val = matrix[row][col];
+        
+        if (val === target) return true;
+        if (val < target) left = mid + 1;
+        else right = mid - 1;
+    }
+    
+    return false;
+}
+
+// Example 2: Search a 2D Matrix II (row/col sorted)
+function searchMatrix2(matrix, target) {
+    if (!matrix.length) return false;
+    
+    const m = matrix.length, n = matrix[0].length;
+    let row = 0, col = n - 1;
+    
+    // Start from top-right corner
+    while (row < m && col >= 0) {
+        if (matrix[row][col] === target) return true;
+        if (matrix[row][col] > target) {
+            col--;  // Move left
+        } else {
+            row++;  // Move down
+        }
+    }
+    
+    return false;
+}
+```
+
+**Time**: O(log(m × n)) for binary search, O(m + n) for staircase search | **Space**: O(1)
+
+#### 4. **DFS/BFS in Matrix**
+
+**Example Problems:**
+- [Word Search](/topics/matrix#word-search) - Find word in grid using DFS
+- [Longest Increasing Path in Matrix](/topics/matrix#longest-increasing-path-in-a-matrix) - Find longest path
+- [Game of Life](/topics/matrix#game-of-life) - Simulate cellular automaton
+- [Valid Sudoku](/topics/matrix#valid-sudoku) - Validate Sudoku board
+
+```javascript
+// Example 1: Word Search
+function exist(board, word) {
+    const m = board.length, n = board[0].length;
+    
+    function dfs(row, col, index) {
+        if (index === word.length) return true;
+        if (row < 0 || row >= m || col < 0 || col >= n) return false;
+        if (board[row][col] !== word[index]) return false;
+        
+        const temp = board[row][col];
+        board[row][col] = '#';  // Mark as visited
+        
+        const found = dfs(row + 1, col, index + 1) ||
+                     dfs(row - 1, col, index + 1) ||
+                     dfs(row, col + 1, index + 1) ||
+                     dfs(row, col - 1, index + 1);
+        
+        board[row][col] = temp;  // Restore
+        return found;
+    }
+    
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (dfs(i, j, 0)) return true;
+        }
+    }
+    
+    return false;
+}
+
+// Example 2: Longest Increasing Path
+function longestIncreasingPath(matrix) {
+    if (!matrix.length) return 0;
+    
+    const m = matrix.length, n = matrix[0].length;
+    const memo = Array.from({ length: m }, () => Array(n).fill(0));
+    const dirs = [[0,1], [1,0], [0,-1], [-1,0]];
+    
+    function dfs(row, col) {
+        if (memo[row][col]) return memo[row][col];
+        
+        let maxLen = 1;
+        for (const [dr, dc] of dirs) {
+            const newRow = row + dr, newCol = col + dc;
+            if (newRow >= 0 && newRow < m && newCol >= 0 && newCol < n &&
+                matrix[newRow][newCol] > matrix[row][col]) {
+                maxLen = Math.max(maxLen, 1 + dfs(newRow, newCol));
+            }
+        }
+        
+        memo[row][col] = maxLen;
+        return maxLen;
+    }
+    
+    let result = 0;
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            result = Math.max(result, dfs(i, j));
+        }
+    }
+    
+    return result;
+}
+```
+
+**Time**: O(m × n) with memoization | **Space**: O(m × n)
+
+### Matrix Problem-Solving Tips
+
+1. **Direction Arrays**: Use `[[0,1], [1,0], [0,-1], [-1,0]]` for 4-directional movement
+2. **Boundary Checks**: Always validate `0 <= row < m && 0 <= col < n`
+3. **In-place Modifications**: Use markers or bit manipulation to save space
+4. **Layer-by-Layer**: Process matrix in concentric layers for spiral/rotation
+5. **Diagonal Processing**: Track sum of indices for diagonals
+
+### Common Matrix Patterns Summary
+
+| Pattern | Technique | Example Problems |
+|---------|-----------|------------------|
+| **Traversal** | Spiral, diagonal, layer-by-layer | Spiral Matrix, Diagonal Traverse |
+| **Transformation** | Transpose, rotate, flip | Rotate Image, Set Matrix Zeroes |
+| **Search** | Binary search, staircase search | Search 2D Matrix I & II |
+| **DFS/BFS** | Backtracking, memoization | Word Search, Longest Path |
+| **Validation** | Row/col/box checks | Valid Sudoku, Toeplitz Matrix |
+
+### Key Problems
+- [Set Matrix Zeroes](/topics/matrix#set-matrix-zeroes)
+- [Spiral Matrix](/topics/matrix#spiral-matrix)
+- [Rotate Image](/topics/matrix#rotate-image)
+- [Search a 2D Matrix](/topics/matrix#search-a-2d-matrix)
+- [Word Search](/topics/matrix#word-search)
+
+---
+
 ## Summary
 
 This guide covers the most important DSA patterns used in technical interviews. Master these patterns and you'll be able to solve most coding problems efficiently!
@@ -2116,6 +2468,7 @@ This guide covers the most important DSA patterns used in technical interviews. 
 8. **Fast lookup** → Hash Table
 9. **LIFO operations** → Stack
 10. **Intervals/ranges** → Intervals pattern
+11. **2D grid/matrix problems** → Matrix pattern
 
 ### Practice Resources
 

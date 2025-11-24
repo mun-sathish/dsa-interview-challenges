@@ -1,34 +1,20 @@
 ### [Rotate Image](https://leetcode.com/problems/rotate-image/)
 
-- **Matrix Rotation Pattern**: Rotate 90 degrees clockwise in-place
-- Two-step approach: Transpose then reverse each row
-- Or: Rotate layer by layer from outside to inside
-- Must modify in-place (O(1) space)
+- Rotate 90 degrees clockwise = Transpose + Reverse each row
+- Or rotate layer by layer from outside to inside
+- In-place rotation without extra space
 
 #### Visual Explanation
 
-**Transpose + Reverse Approach:**
+**Rotation Process:**
 ```
-Original:          Transpose:         Reverse rows:
-1 2 3              1 4 7              7 4 1
-4 5 6      →       2 5 8      →       8 5 2
-7 8 9              3 6 9              9 6 3
+Original:        Transpose:       Reverse Rows:
+[1,2,3]         [1,4,7]          [7,4,1]
+[4,5,6]    →    [2,5,8]     →    [8,5,2]
+[7,8,9]         [3,6,9]          [9,6,3]
 
-Step 1: Swap across diagonal
-  matrix[i][j] ↔ matrix[j][i]
-
+Step 1: Transpose (swap matrix[i][j] with matrix[j][i])
 Step 2: Reverse each row
-  [1,4,7] → [7,4,1]
-  [2,5,8] → [8,5,2]
-  [3,6,9] → [9,6,3]
-```
-
-**90° Clockwise Rotation:**
-```
-(0,0) → (0,2)
-(0,1) → (1,2)
-(0,2) → (2,2)
-Pattern: (i,j) → (j, n-1-i)
 ```
 
 📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=fMSJSS7eO1w)
@@ -36,16 +22,15 @@ Pattern: (i,j) → (j, n-1-i)
 ```js copy
 /**
  * @param {number[][]} matrix
- * @return {void} Do not return anything, modify matrix in-place instead.
+ * @return {void}
  */
-
-// Approach 1: Transpose + Reverse Rows
 var rotate = function(matrix) {
     const n = matrix.length;
     
-    // Step 1: Transpose the matrix (swap matrix[i][j] with matrix[j][i])
+    // Step 1: Transpose the matrix
     for (let i = 0; i < n; i++) {
         for (let j = i + 1; j < n; j++) {
+            // Swap matrix[i][j] with matrix[j][i]
             [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]];
         }
     }
@@ -55,38 +40,9 @@ var rotate = function(matrix) {
         matrix[i].reverse();
     }
 };
-
-// Approach 2: Layer by Layer Rotation
-var rotateLayerByLayer = function(matrix) {
-    const n = matrix.length;
-    
-    for (let layer = 0; layer < Math.floor(n / 2); layer++) {
-        const first = layer;
-        const last = n - 1 - layer;
-        
-        for (let i = first; i < last; i++) {
-            const offset = i - first;
-            
-            // Save top
-            const top = matrix[first][i];
-            
-            // left -> top
-            matrix[first][i] = matrix[last - offset][first];
-            
-            // bottom -> left
-            matrix[last - offset][first] = matrix[last][last - offset];
-            
-            // right -> bottom
-            matrix[last][last - offset] = matrix[i][last];
-            
-            // top -> right
-            matrix[i][last] = top;
-        }
-    }
-};
 ```
 
 ##### Complexity
 
-- Time: O(n²) where n is matrix dimension
+- Time: O(n²) where n is the dimension of matrix
 - Space: O(1) in-place rotation

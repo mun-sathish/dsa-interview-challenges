@@ -1,0 +1,98 @@
+### [Game of Life](https://leetcode.com/problems/game-of-life/)
+
+- Count live neighbors for each cell
+- Apply rules: less than 2 or more than 3 live neighbors → die, exactly 3 → born
+- Use encoding to track state changes in-place
+- State 2 = was alive, now dead; State -1 = was dead, now alive
+
+#### Visual Explanation
+
+**State Transitions:**
+```
+Current:         Next:
+[0,1,0]         [0,0,0]
+[0,0,1]    →    [1,0,1]
+[1,1,1]         [0,1,1]
+[0,0,0]         [0,1,0]
+
+Rules:
+- Live cell: 2 or 3 neighbors → stays alive
+- Live cell: less than 2 or more than 3 neighbors → dies
+- Dead cell: exactly 3 neighbors → becomes alive
+
+In-place encoding:
+0 → 0 (dead → dead)
+1 → 1 (alive → alive)
+1 → 2 (alive → dead)
+0 → -1 (dead → alive)
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=fei4bJQdBUQ)
+
+```js copy
+/**
+ * @param {number[][]} board
+ * @return {void}
+ */
+var gameOfLife = function(board) {
+    const m = board.length;
+    const n = board[0].length;
+    
+    const directions = [
+        [-1, -1], [-1, 0], [-1, 1],
+        [0, -1],           [0, 1],
+        [1, -1],  [1, 0],  [1, 1]
+    ];
+    
+    // Count live neighbors
+    function countLiveNeighbors(i, j) {
+        let count = 0;
+        for (const [di, dj] of directions) {
+            const ni = i + di;
+            const nj = j + dj;
+            if (ni >= 0 && ni < m && nj >= 0 && nj < n) {
+                // Count original live cells (1 or 2)
+                if (board[ni][nj] === 1 || board[ni][nj] === 2) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    
+    // First pass: mark state changes
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            const liveNeighbors = countLiveNeighbors(i, j);
+            
+            if (board[i][j] === 1) {
+                // Live cell
+                if (liveNeighbors < 2 || liveNeighbors > 3) {
+                    board[i][j] = 2;  // Dies
+                }
+            } else {
+                // Dead cell
+                if (liveNeighbors === 3) {
+                    board[i][j] = -1;  // Becomes alive
+                }
+            }
+        }
+    }
+    
+    // Second pass: finalize states
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (board[i][j] === 2) {
+                board[i][j] = 0;
+            } else if (board[i][j] === -1) {
+                board[i][j] = 1;
+            }
+        }
+    }
+};
+```
+
+##### Complexity
+
+- Time: O(m × n) where m is rows and n is columns
+- Space: O(1) in-place with encoding

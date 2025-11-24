@@ -10,6 +10,7 @@ const meta = {
     },
   },
   array: 'Array',
+  matrix: 'Matrix',
   string: 'String',
   math: 'Math',
   'binary-search': 'Binary Search',

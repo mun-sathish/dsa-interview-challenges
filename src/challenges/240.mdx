@@ -1,0 +1,57 @@
+### [Search a 2D Matrix II](https://leetcode.com/problems/search-a-2d-matrix-ii/)
+
+- Start from top-right or bottom-left corner
+- If target > current, move down (eliminate row)
+- If target < current, move left (eliminate column)
+- O(m+n) time complexity
+
+#### Visual Explanation
+
+**Search from Top-Right:**
+```
+Matrix:          Target = 5
+[1,  4,  7, 11]  Start at 11 (top-right)
+[2,  5,  8, 12]  11 > 5 → move left
+[3,  6,  9, 16]  7 > 5 → move left
+[10, 13, 14, 17] 4 < 5 → move down
+                 5 = 5 → Found!
+
+Each move eliminates a row or column
+```
+
+📺 [Watch Visual Explanation](https://www.youtube.com/watch?v=FOa55B9Ikfg)
+
+```js copy
+/**
+ * @param {number[][]} matrix
+ * @param {number} target
+ * @return {boolean}
+ */
+var searchMatrix = function(matrix, target) {
+    if (matrix.length === 0 || matrix[0].length === 0) return false;
+    
+    const m = matrix.length;
+    const n = matrix[0].length;
+    
+    // Start from top-right corner
+    let row = 0;
+    let col = n - 1;
+    
+    while (row < m && col >= 0) {
+        if (matrix[row][col] === target) {
+            return true;
+        } else if (matrix[row][col] > target) {
+            col--;  // Move left
+        } else {
+            row++;  // Move down
+        }
+    }
+    
+    return false;
+};
+```
+
+##### Complexity
+
+- Time: O(m + n) where m is rows and n is columns
+- Space: O(1)
